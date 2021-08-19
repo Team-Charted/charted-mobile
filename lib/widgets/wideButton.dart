@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WideButton extends StatelessWidget {
   final Color _primaryColor;
@@ -9,14 +10,19 @@ class WideButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
 
     return ElevatedButton(
       onPressed: _action,
       child: Text(
         _buttonText,
-        style: theme.textTheme.button,
+        style: GoogleFonts.inter(
+          textStyle: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       style: ElevatedButton.styleFrom(
         primary: _primaryColor,

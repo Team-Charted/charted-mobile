@@ -1,9 +1,18 @@
+import 'package:charted/widgets/passwordTextField.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/textFieldCustom.dart';
 import '../widgets/wideButton.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -13,7 +22,13 @@ class SignUpScreen extends StatelessWidget {
     final _appBar = AppBar(
       title: Text(
         'charted',
-        style: theme.textTheme.caption,
+        style: GoogleFonts.inter(
+          textStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(127, 90, 240, 1),
+          ),
+        ),
       ),
       backgroundColor: theme.primaryColorDark,
       centerTitle: true,
@@ -31,81 +46,156 @@ class SignUpScreen extends StatelessWidget {
               MediaQuery.of(context).padding.bottom,
           color: theme.primaryColorDark,
           alignment: Alignment.topCenter,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-
-              //Headertext
-              Container(
-                width: size.width * 0.8,
-                child: Text(
-                  'Hi,',
-                  style: theme.textTheme.headline2,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: size.height * 0.025,
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Container(
-                width: size.width * 0.8,
-                child: Text(
-                  'Welcome to charted.',
-                  style: theme.textTheme.headline1,
+
+                //Headertext
+                Container(
+                  width: size.width * 0.8,
+                  child: Text(
+                    'Hi,',
+                    style: GoogleFonts.manrope(
+                      textStyle: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                Container(
+                  width: size.width * 0.8,
+                  child: Text(
+                    'Welcome to charted.',
+                    style: GoogleFonts.manrope(
+                      textStyle: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
 
-              SizedBox(
-                height: size.height * 0.04,
-              ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
 
-              //Name text field
-              TextFieldCustom('Name', () {}),
+                //Name text field
+                TextFieldCustom('Name', _nameValidator),
 
-              SizedBox(
-                height: size.height * 0.04,
-              ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
 
-              //Username text field
-              TextFieldCustom('Username', () {}),
+                //Username text field
+                TextFieldCustom('Username', _usernameValidator),
 
-              SizedBox(
-                height: size.height * 0.04,
-              ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
 
-              //Phone number text field
-              TextFieldCustom('Phone Number', () {}),
+                //Phone number text field
+                TextFieldCustom('Phone Number', _phoneNumberValidator),
 
-              SizedBox(
-                height: size.height * 0.04,
-              ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
 
-              //Email text field
-              TextFieldCustom('Email', () {}),
+                //Email text field
+                TextFieldCustom('Email', _emailValidator),
 
-              SizedBox(
-                height: size.height * 0.04,
-              ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
 
-              //Password text field
-              TextFieldCustom('Password', () {}),
+                //Password text field
+                PasswordTextField('Password', _passwordValidator),
 
-              Spacer(),
+                Spacer(),
 
-              //Sign Up Button
-              WideButton(theme.accentColor, 'Sign Up', () {
-                print('Button was pressed');
-              }),
+                //Sign Up Button
+                WideButton(theme.accentColor, 'Sign Up', () {
+                  if (_formKey.currentState!.validate()) {
+                    print('Validator working');
+                  }
+                }),
 
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-            ],
+                SizedBox(
+                  height: size.height * 0.025,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  //Name validator
+  String? _nameValidator(value) {
+    if (value == null || value.isEmpty) {
+      return 'Name can\'t be empty';
+    }
+    return null;
+  }
+
+  //username validator
+  String? _usernameValidator(value) {
+    String pattern = r"^[a-z0-9_-]{3,15}$";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Username can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
+  }
+
+  //phone number validator
+  String? _phoneNumberValidator(value) {
+    String pattern =
+        r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Phone number can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
+  }
+
+  //Email validator
+  String? _emailValidator(value) {
+    String pattern = r"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Email can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
+  }
+
+  //Password validator
+  String? _passwordValidator(value) {
+    String pattern =
+        r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Password can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextFieldCustom extends StatelessWidget {
   final String _label;
-  final Function() _validator;
+  final String? Function(String?) _validator;
 
   TextFieldCustom(this._label, this._validator);
 
@@ -16,7 +17,14 @@ class TextFieldCustom extends StatelessWidget {
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
-        style: theme.textTheme.headline5,
+        style: GoogleFonts.inter(
+          textStyle: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: theme.highlightColor,
+          ),
+        ),
+        validator: _validator,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(16.0),
           enabledBorder: OutlineInputBorder(
@@ -31,10 +39,35 @@ class TextFieldCustom extends StatelessWidget {
               color: theme.highlightColor,
             ),
           ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(
+              color: theme.accentColor,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(
+              color: theme.accentColor,
+            ),
+          ),
           labelText: _label,
-          labelStyle: theme.textTheme.headline5,
+          labelStyle: GoogleFonts.inter(
+            textStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              color: theme.highlightColor,
+            ),
+          ),
           filled: true,
           fillColor: theme.primaryColor,
+          errorStyle: GoogleFonts.inter(
+            textStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+              color: theme.accentColor,
+            ),
+          ),
         ),
       ),
     );

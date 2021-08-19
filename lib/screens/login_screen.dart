@@ -1,10 +1,19 @@
+import 'package:charted/widgets/passwordTextField.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/textFieldCustom.dart';
 import '../widgets/wideButton.dart';
 import 'sign_up_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -14,7 +23,13 @@ class LoginScreen extends StatelessWidget {
     final _appBar = AppBar(
       title: Text(
         'charted',
-        style: theme.textTheme.caption,
+        style: GoogleFonts.inter(
+          textStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(127, 90, 240, 1),
+          ),
+        ),
       ),
       backgroundColor: theme.primaryColorDark,
       centerTitle: true,
@@ -32,87 +47,144 @@ class LoginScreen extends StatelessWidget {
               MediaQuery.of(context).padding.top -
               MediaQuery.of(context).padding.bottom,
           alignment: Alignment.topCenter,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-
-              //Headertext
-              Text(
-                'Glad to see you back,',
-                style: theme.textTheme.headline2,
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Text(
-                'Let\'s sign you in.',
-                style: theme.textTheme.headline1,
-              ),
-
-              SizedBox(
-                height: size.height * 0.06,
-              ),
-
-              //emailTextfield
-              TextFieldCustom('Email', () {}),
-
-              SizedBox(
-                height: size.height * 0.04,
-              ),
-
-              //PasswordTextField
-              TextFieldCustom('Password', () {}),
-
-              Spacer(),
-
-              //sign up prompt
-              Container(
-                width: size.width * 0.8,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don\'t have an account?',
-                      style: theme.textTheme.headline6,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.01,
-                    ),
-                    GestureDetector(
-                      //Navigate to Sign Up Screen
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpScreen()),
-                        );
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: theme.textTheme.headline4,
-                      ),
-                    ),
-                  ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: size.height * 0.025,
                 ),
-              ),
 
-              SizedBox(
-                height: size.height * 0.02,
-              ),
+                //Headertext
+                Text(
+                  'Glad to see you back,',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                Text(
+                  'Let\'s sign you in.',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
 
-              //Button
-              WideButton(theme.accentColor, 'Sign In', () {}),
+                SizedBox(
+                  height: size.height * 0.06,
+                ),
 
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-            ],
+                //emailTextfield
+                TextFieldCustom('Email', _emailValidator),
+
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
+
+                //PasswordTextField
+                //TextFieldCustom('Password', _passwordValidator),
+                PasswordTextField('Password', _passwordValidator),
+
+                Spacer(),
+
+                //sign up prompt
+                Container(
+                  width: size.width * 0.8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account?',
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.normal,
+                            color: Color.fromRGBO(148, 161, 178, 1),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.01,
+                      ),
+                      GestureDetector(
+                        //Navigate to Sign Up Screen
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpScreen()),
+                          );
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: GoogleFonts.inter(
+                            textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+
+                //Button
+                WideButton(theme.accentColor, 'Sign In', () {
+                  if (_formKey.currentState!.validate()) {
+                    print('Validator working');
+                  }
+                }),
+
+                SizedBox(
+                  height: size.height * 0.025,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  //Email validator
+  String? _emailValidator(value) {
+    String pattern = r"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Email can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
+  }
+
+  //Password validator
+  String? _passwordValidator(value) {
+    String pattern =
+        r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$";
+    RegExp regExp = new RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Password can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Invalid input';
+    }
+    return null;
   }
 }
