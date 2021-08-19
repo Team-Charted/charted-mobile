@@ -1,3 +1,5 @@
+import 'package:charted/screens/charts_screen.dart';
+import 'package:charted/screens/leaderboard_screen.dart';
 import 'package:charted/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
 
       //Home screen
-      home: LoginScreen(),
+      home: LeaderboardScreen(),
     );
   }
 }
