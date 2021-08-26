@@ -1,3 +1,4 @@
+import 'package:charted/screens/account_screen.dart';
 import 'package:charted/screens/charts_screen.dart';
 import 'package:charted/screens/leaderboard_screen.dart';
 import 'package:charted/screens/login_screen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
 
       //Home screen
-      home: LeaderboardScreen(),
+      home: AccountScreen(),
     );
   }
 }

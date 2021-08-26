@@ -37,7 +37,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
           icon: Icon(
             Icons.menu_rounded,
             color: Colors.white,
-            size: 30.0,
+            size: 25.0,
           ),
         )
       ],

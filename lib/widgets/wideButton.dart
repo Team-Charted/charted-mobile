@@ -28,7 +28,7 @@ class WideButton extends StatelessWidget {
         primary: _primaryColor,
         minimumSize: Size(
           size.width * 0.8,
-          size.height * 0.060,
+          size.height * 0.065,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),

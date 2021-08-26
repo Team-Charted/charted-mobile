@@ -32,7 +32,7 @@ class LeaderboardScreen extends StatelessWidget {
           icon: Icon(
             Icons.menu_rounded,
             color: Colors.white,
-            size: 30.0,
+            size: 25.0,
           ),
         )
       ],
