@@ -1,3 +1,4 @@
+import 'package:charted/models/chart_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,6 +18,64 @@ class _ChartsScreenState extends State<ChartsScreen> {
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
     final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
     final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
+
+    //Charts data
+    final List<ChartData> _charts = [
+      ChartData(
+        '1',
+        'Billboard Hot 100',
+        50,
+        'Weekly',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+      ChartData(
+        '2',
+        'Spotify Top 200: Global',
+        25,
+        'Daily',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+      ChartData(
+        '3',
+        'Billboard Hot 100',
+        50,
+        'Weekly',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+      ChartData(
+        '4',
+        'Spotify Top 200: Global',
+        25,
+        'Daily',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+      ChartData(
+        '5',
+        'Billboard Hot 100',
+        50,
+        'Weekly',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+      ChartData(
+        '6',
+        'Spotify Top 200: Global',
+        25,
+        'Daily',
+        '2021-07-12',
+        '1234567891234',
+        0,
+      ),
+    ];
 
     //Appbar
     final _appBar = AppBar(
@@ -54,51 +113,38 @@ class _ChartsScreenState extends State<ChartsScreen> {
             MediaQuery.of(context).padding.top -
             MediaQuery.of(context).padding.bottom,
         alignment: Alignment.topCenter,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: _size.height * 0.02,
-            ),
+        child: Container(
+          width: _size.width * 0.9,
 
-            //Billboard Chart
-            ChartCard(
-              title: 'Billboard Hot 100',
-              cardColor: _billboardBlue,
-              cost: '30',
-              prizePool: '150000',
-              time: '10 : 02 : 30',
-              issue: 'Week of July 17 2021',
-            ),
+          //Main List View
 
-            SizedBox(
-              height: _size.height * 0.02,
-            ),
+          child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(
+                    height: _size.height * 0.02,
+                  ),
+              itemCount: _charts.length,
+              itemBuilder: (context, index) {
+                final item = _charts[index];
 
-            //Spotify Chart
-            ChartCard(
-              title: 'Spotify Global Top 50',
-              cardColor: _spotifyGreen,
-              cost: '25',
-              prizePool: '100000',
-              time: '12 : 00 : 45',
-              issue: 'Week of July 17 2021',
-            ),
+                //Determine color of card
+                final _bgColor = (item.name == 'Billboard Hot 100')
+                    ? _billboardBlue
+                    : _spotifyGreen;
 
-            SizedBox(
-              height: _size.height * 0.02,
-            ),
+                //Determine issue
+                final String _issue = (item.type == 'Weekly')
+                    ? 'Week of ' + item.date
+                    : 'Day of ' + item.date;
 
-            //Billboard Chart
-            ChartCard(
-              title: 'Apple Music Top 50',
-              cardColor: _appleMusicRed,
-              cost: '20',
-              prizePool: '80000',
-              time: '08 : 10 : 15',
-              issue: 'Week of July 17 2021',
-            ),
-          ],
+                return ChartCard(
+                  title: item.getName(),
+                  cardColor: _bgColor,
+                  prizePool: item.get_v().toString(),
+                  cost: item.cost.toString(),
+                  time: item.endTime,
+                  issue: _issue,
+                );
+              }),
         ),
       ),
     );

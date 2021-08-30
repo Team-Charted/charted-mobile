@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history_rounded),
-            label: 'History',
+            label: 'Results',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_rounded),

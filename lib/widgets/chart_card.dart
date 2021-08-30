@@ -114,7 +114,7 @@ class ChartCard extends StatelessWidget {
 
           //Add and edit
           Container(
-            width: size.width * 0.85,
+            width: size.width * 0.9,
             height: size.height * 0.06,
             decoration: BoxDecoration(
               color: theme.primaryColor,

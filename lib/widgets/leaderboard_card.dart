@@ -9,14 +9,14 @@ class LeaderboardCard extends StatelessWidget {
   final Color cardColor;
   final String prizePool;
   final String winnings;
-  final String dateOfIssue;
+  final String issue;
 
   LeaderboardCard({
     required this.title,
     required this.cardColor,
     required this.prizePool,
     required this.winnings,
-    required this.dateOfIssue,
+    required this.issue,
   });
 
   @override
@@ -102,7 +102,7 @@ class LeaderboardCard extends StatelessWidget {
 
           //Date and View button
           Container(
-            width: size.width * 0.85,
+            width: size.width * 0.9,
             height: size.height * 0.06,
             decoration: BoxDecoration(
               color: theme.primaryColor,
@@ -120,7 +120,7 @@ class LeaderboardCard extends StatelessWidget {
 
                 //Date of issue
                 Text(
-                  dateOfIssue,
+                  issue,
                   style: GoogleFonts.inter(
                     color: Colors.white,
                     fontSize: 12,
@@ -138,7 +138,7 @@ class LeaderboardCard extends StatelessWidget {
                     Navigator.of(context).push(
                       CustomPageRoute(
                         LeaderboardDetailsScreen(
-                            this.cardColor, this.title, this.dateOfIssue),
+                            this.cardColor, this.title, this.issue),
                       ),
                     );
                   },
