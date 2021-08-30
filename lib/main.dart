@@ -1,8 +1,5 @@
-import 'package:charted/screens/account_screen.dart';
-import 'package:charted/screens/charts_screen.dart';
-import 'package:charted/screens/leaderboard_screen.dart';
-import 'package:charted/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:charted/screens/home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
 
       //Home screen
-      home: AccountScreen(),
+      home: HomeScreen(),
     );
   }
 }

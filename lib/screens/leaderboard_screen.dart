@@ -2,8 +2,6 @@ import 'package:charted/widgets/leaderboard_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../widgets/bottom_nav_bar.dart';
-
 class LeaderboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,8 +38,6 @@ class LeaderboardScreen extends StatelessWidget {
       elevation: 2,
     );
 
-    //Bottom Navigation bar
-    final _bottomNavigationBar = BottomNavBar();
     return Scaffold(
       //Appbar
       appBar: _appBar,
@@ -92,9 +88,6 @@ class LeaderboardScreen extends StatelessWidget {
           ],
         ),
       ),
-
-      //Bottom nav bar
-      bottomNavigationBar: _bottomNavigationBar,
     );
   }
 }

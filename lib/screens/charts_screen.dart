@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/chart_card.dart';
 
 class ChartsScreen extends StatefulWidget {
@@ -44,9 +43,6 @@ class _ChartsScreenState extends State<ChartsScreen> {
       backgroundColor: _theme.primaryColorDark,
       elevation: 2,
     );
-
-    //Bottom Navigation bar
-    final _bottomNavigationBar = BottomNavBar();
 
     return Scaffold(
       appBar: _appBar,
@@ -102,7 +98,6 @@ class _ChartsScreenState extends State<ChartsScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _bottomNavigationBar,
     );
   }
 }

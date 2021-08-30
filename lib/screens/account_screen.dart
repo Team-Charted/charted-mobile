@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
-import 'package:charted/widgets/wideButton.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../widgets/bottom_nav_bar.dart';
+import '../widgets/wideButton.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -38,12 +35,8 @@ class AccountScreen extends StatelessWidget {
       elevation: 2,
     );
 
-    //Bottom Navigation bar
-    final _bottomNavigationBar = BottomNavBar();
-
     return Scaffold(
       appBar: _appBar,
-      bottomNavigationBar: _bottomNavigationBar,
       body: Container(
         color: _theme.primaryColorDark,
         width: _size.width,
