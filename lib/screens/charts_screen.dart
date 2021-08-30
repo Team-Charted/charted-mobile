@@ -68,6 +68,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
               cost: '30',
               prizePool: '150000',
               time: '10 : 02 : 30',
+              issue: 'Week of July 17 2021',
             ),
 
             SizedBox(
@@ -81,6 +82,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
               cost: '25',
               prizePool: '100000',
               time: '12 : 00 : 45',
+              issue: 'Week of July 17 2021',
             ),
 
             SizedBox(
@@ -94,6 +96,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
               cost: '20',
               prizePool: '80000',
               time: '08 : 10 : 15',
+              issue: 'Week of July 17 2021',
             ),
           ],
         ),

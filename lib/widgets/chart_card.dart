@@ -1,5 +1,8 @@
+import 'package:charted/screens/confirm_album_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'custom_page_route.dart';
 
 class ChartCard extends StatelessWidget {
   final String title;
@@ -7,13 +10,16 @@ class ChartCard extends StatelessWidget {
   final String prizePool;
   final String cost;
   final String time;
+  final String issue;
 
-  ChartCard(
-      {required this.title,
-      required this.cardColor,
-      required this.prizePool,
-      required this.cost,
-      required this.time});
+  ChartCard({
+    required this.title,
+    required this.cardColor,
+    required this.prizePool,
+    required this.cost,
+    required this.time,
+    required this.issue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +132,7 @@ class ChartCard extends StatelessWidget {
 
                 //Date of issue
                 Text(
-                  'Week of July 17 2021',
+                  issue,
                   style: GoogleFonts.inter(
                     color: Colors.white,
                     fontSize: 12,
@@ -139,6 +145,12 @@ class ChartCard extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     print('Add ' + title + ' chart');
+                    Navigator.of(context).push(
+                      CustomPageRoute(
+                        ConfirmAlbumScreen(
+                            this.cardColor, this.title, this.issue, 18.0),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.add_circle_outline_rounded,

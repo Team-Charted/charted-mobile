@@ -1,7 +1,10 @@
-import 'package:charted/models/leaderboard_data.dart';
-import 'package:charted/widgets/chart_banner.dart';
+import 'package:charted/screens/my_album_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../models/leaderboard_data.dart';
+import '../widgets/chart_banner.dart';
+import '../widgets/custom_page_route.dart';
 
 class LeaderboardDetailsScreen extends StatelessWidget {
   final Color _bannerColor;
@@ -57,6 +60,26 @@ class LeaderboardDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              CustomPageRoute(
+                MyAlbumScreen(
+                  this._bannerColor,
+                  this._title,
+                  this._issue,
+                ),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.album_rounded,
+            color: _theme.accentColor,
+            size: 30.0,
+          ),
+        )
+      ],
       backgroundColor: _theme.primaryColorDark,
       elevation: 2,
     );
