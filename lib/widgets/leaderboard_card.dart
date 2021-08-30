@@ -1,5 +1,8 @@
+import 'package:charted/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../screens/leaderboard_details_screen.dart';
 
 class LeaderboardCard extends StatelessWidget {
   final String title;
@@ -97,7 +100,7 @@ class LeaderboardCard extends StatelessWidget {
             ),
           ),
 
-          //Add and edit
+          //Date and View button
           Container(
             width: size.width * 0.85,
             height: size.height * 0.06,
@@ -126,10 +129,18 @@ class LeaderboardCard extends StatelessWidget {
 
                 Spacer(),
 
-                //Add/Edit
+                //View Button
                 IconButton(
                   onPressed: () {
                     print('Show ' + title + ' leaderboard');
+
+                    //Custom Navigation
+                    Navigator.of(context).push(
+                      CustomPageRoute(
+                        LeaderboardDetailsScreen(
+                            this.cardColor, this.title, this.dateOfIssue),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.leaderboard_rounded,
