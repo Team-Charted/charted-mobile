@@ -32,5 +32,5 @@ class ChartData {
 
   String getEndTime() => endTime;
 
-  double get_v() => _v;
+  double getV() => _v;
 }

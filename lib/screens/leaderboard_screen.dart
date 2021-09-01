@@ -1,7 +1,6 @@
-import 'package:charted/models/chart_data.dart';
-import 'package:charted/models/result_chart.dart';
-import 'package:charted/models/result_data.dart';
-import 'package:charted/widgets/leaderboard_card.dart';
+import '../models/result_chart.dart';
+import '../models/result_data.dart';
+import '../widgets/leaderboard_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,7 +12,7 @@ class LeaderboardScreen extends StatelessWidget {
 
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
     final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
-    final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
+    //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
 
     //Result Data
     final List<Result> _results = [

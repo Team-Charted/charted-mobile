@@ -9,8 +9,8 @@ class CreateAlbumScreen extends StatelessWidget {
 
     //Colors
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
-    final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
-    final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
+    //final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
+    //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
 
     //Appbar
     final _appBar = AppBar(

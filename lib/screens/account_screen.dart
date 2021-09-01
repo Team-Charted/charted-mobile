@@ -88,7 +88,7 @@ class AccountScreen extends StatelessWidget {
   ) {
     return Container(
       height: size.height * 0.25,
-      width: size.width * 0.85,
+      width: size.width * 0.9,
       decoration: BoxDecoration(
         color: theme.primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -99,7 +99,7 @@ class AccountScreen extends StatelessWidget {
         children: [
           //Name
           Container(
-            width: size.width * 0.75,
+            width: size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -125,7 +125,7 @@ class AccountScreen extends StatelessWidget {
 
           //Username
           Container(
-            width: size.width * 0.75,
+            width: size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -151,7 +151,7 @@ class AccountScreen extends StatelessWidget {
 
           //Phone Number
           Container(
-            width: size.width * 0.75,
+            width: size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -177,7 +177,7 @@ class AccountScreen extends StatelessWidget {
 
           //Email
           Container(
-            width: size.width * 0.75,
+            width: size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -212,7 +212,7 @@ class AccountScreen extends StatelessWidget {
   ) {
     return Container(
       height: size.height * 0.28,
-      width: size.width * 0.85,
+      width: size.width * 0.9,
       decoration: BoxDecoration(
         color: theme.accentColor,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),

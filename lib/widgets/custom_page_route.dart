@@ -4,9 +4,7 @@ class CustomPageRoute extends PageRouteBuilder {
   final Widget child;
 
   CustomPageRoute(this.child)
-      : super(
-            transitionDuration: Duration(milliseconds: 200),
-            pageBuilder: (context, animation, secondaryAnimation) => child);
+      : super(pageBuilder: (context, animation, secondaryAnimation) => child);
 
   //Custom Navigation animation
   @override

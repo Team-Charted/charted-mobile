@@ -17,7 +17,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
 
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
     final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
-    final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
+    //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
 
     //Charts data
     final List<ChartData> _charts = [
@@ -139,7 +139,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
                 return ChartCard(
                   title: item.getName(),
                   cardColor: _bgColor,
-                  prizePool: item.get_v().toString(),
+                  prizePool: item.getV().toString(),
                   cost: item.cost.toString(),
                   time: item.endTime,
                   issue: _issue,

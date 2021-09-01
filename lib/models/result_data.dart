@@ -1,4 +1,3 @@
-import 'package:charted/models/chart_data.dart';
 import 'package:charted/models/result_chart.dart';
 
 class Result {
@@ -32,5 +31,5 @@ class Result {
 
   String getDate() => date;
 
-  double get_v() => _v;
+  double getV() => _v;
 }
