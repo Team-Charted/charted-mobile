@@ -10,7 +10,6 @@ class SmallButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
     final _size = MediaQuery.of(context).size;
 
     return ElevatedButton(

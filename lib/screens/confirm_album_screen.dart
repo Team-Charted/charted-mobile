@@ -199,6 +199,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
 
                     //List tile
                     return ListTile(
+                      contentPadding: EdgeInsets.all(0.0),
                       tileColor: _theme.primaryColor,
                       onTap: () {
                         //Change lead artist
@@ -206,16 +207,35 @@ class ConfirmAlbumScreen extends StatelessWidget {
                             index.toString() +
                             ' pressed');
                       },
-                      leading: Image.network(
-                        item.imageURL,
-                        fit: BoxFit.fill,
-                        width: _size.height * 0.08,
-                        height: _size.height * 0.1,
+                      leading: Container(
+                        width: _size.width * 0.3,
+                        //color: Colors.white,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              //Prediction
+                              Text(
+                                (index + 1).toString(),
+                                style: GoogleFonts.inter(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+
+                              //Thumbnail
+                              Image.network(
+                                item.imageURL,
+                                fit: BoxFit.fill,
+                                width: _size.width * 0.2,
+                                height: _size.width * 0.2,
+                              ),
+                            ]),
                       ),
                       title: Text(
                         item.getTitle(),
                         style: GoogleFonts.inter(
-                          fontSize: 16,
+                          fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

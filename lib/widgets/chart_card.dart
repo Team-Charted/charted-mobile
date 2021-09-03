@@ -1,8 +1,8 @@
-import 'package:charted/screens/confirm_album_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'custom_page_route.dart';
+import '../screens/create_album_screen.dart';
 
 class ChartCard extends StatelessWidget {
   final String title;
@@ -147,13 +147,12 @@ class ChartCard extends StatelessWidget {
                     print('Add ' + title + ' chart');
                     Navigator.of(context).push(
                       CustomPageRoute(
-                        ConfirmAlbumScreen(
-                            this.cardColor, this.title, this.issue, 18.0),
+                        CreateAlbumScreen(),
                       ),
                     );
                   },
                   icon: Icon(
-                    Icons.add_circle_outline_rounded,
+                    Icons.edit,
                     color: Colors.white,
                     size: 25.0,
                   ),
