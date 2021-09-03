@@ -313,7 +313,7 @@ class CreateAlbumScreen extends StatelessWidget {
             top: Radius.circular(20.0),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.symmetric(horizontal: _size.width * 0.05),
         child: ListView.separated(
           separatorBuilder: (context, index) => Divider(
             color: _theme.highlightColor,

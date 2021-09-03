@@ -217,7 +217,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
                               Text(
                                 (index + 1).toString(),
                                 style: GoogleFonts.inter(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),

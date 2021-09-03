@@ -4,14 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../screens/leaderboard_details_screen.dart';
 
-class LeaderboardCard extends StatelessWidget {
+class ResultCard extends StatelessWidget {
   final String title;
   final Color cardColor;
   final String prizePool;
   final String winnings;
   final String issue;
 
-  LeaderboardCard({
+  ResultCard({
     required this.title,
     required this.cardColor,
     required this.prizePool,

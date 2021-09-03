@@ -1,10 +1,10 @@
 import '../models/result_chart.dart';
 import '../models/result_data.dart';
-import '../widgets/leaderboard_card.dart';
+import '../widgets/result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LeaderboardScreen extends StatelessWidget {
+class ResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
@@ -47,7 +47,7 @@ class LeaderboardScreen extends StatelessWidget {
     //Appbar
     final _appBar = AppBar(
       title: Text(
-        'Leaderboard',
+        'Results',
         style: GoogleFonts.inter(
           textStyle: TextStyle(
             fontSize: 20,
@@ -106,7 +106,7 @@ class LeaderboardScreen extends StatelessWidget {
                     ? 'Week of ' + item.date
                     : 'Day of ' + item.date;
 
-                return LeaderboardCard(
+                return ResultCard(
                   title: item.chart.getName(),
                   cardColor: _bgColor,
                   prizePool: item.chart.prizePool.toString(),

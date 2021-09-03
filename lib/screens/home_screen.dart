@@ -1,6 +1,6 @@
 import 'package:charted/screens/account_screen.dart';
 import 'package:charted/screens/charts_screen.dart';
-import 'package:charted/screens/leaderboard_screen.dart';
+import 'package:charted/screens/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final _screens = [
     ChartsScreen(),
-    LeaderboardScreen(),
+    ResultsScreen(),
     AccountScreen(),
   ];
 
