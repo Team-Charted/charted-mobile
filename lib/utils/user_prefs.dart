@@ -11,4 +11,6 @@ class UserPreferences {
       await _preferences.setString(_keyToken, token);
 
   static String? getToken() => _preferences.getString(_keyToken);
+
+  static void removeToken() => _preferences.remove(_keyToken);
 }

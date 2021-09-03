@@ -1,8 +1,9 @@
-import 'package:charted/screens/login_screen.dart';
-import 'package:charted/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:charted/screens/home_screen.dart';
 import 'package:flutter/services.dart';
+
+import '../screens/home_screen.dart';
+import '../screens/login_screen.dart';
+import '../utils/user_prefs.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

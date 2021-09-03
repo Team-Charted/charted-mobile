@@ -73,7 +73,7 @@ class AccountScreen extends StatelessWidget {
             //Signout Button
             WideButton(_theme.highlightColor, 'Sign Out', () {
               //Delete token
-              UserPreferences.setToken('');
+              UserPreferences.removeToken();
               //Navigate to Login Screen
               Navigator.of(context).pushReplacement(
                 CustomPageRoute(
