@@ -1,9 +1,12 @@
-import 'package:charted/widgets/passwordTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/textFieldCustom.dart';
 import '../widgets/wideButton.dart';
+import '../screens/home_screen.dart';
+import '../utils/user_prefs.dart';
+import '../widgets/custom_page_route.dart';
+import '../widgets/passwordTextField.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -126,7 +129,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //Sign Up Button
                 WideButton(theme.accentColor, 'Sign Up', () {
                   if (_formKey.currentState!.validate()) {
-                    print('Validator working');
+                    //Send Create User Request
+                    //Set Token
+                    UserPreferences.setToken('Some random non null string ');
+                    //Navigate to Home screen
+                    Navigator.of(context).pushReplacement(
+                      CustomPageRoute(
+                        HomeScreen(),
+                      ),
+                    );
                   }
                 }),
 

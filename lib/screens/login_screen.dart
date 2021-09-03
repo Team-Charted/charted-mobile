@@ -1,10 +1,13 @@
-import 'package:charted/widgets/passwordTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/textFieldCustom.dart';
 import '../widgets/wideButton.dart';
 import 'sign_up_screen.dart';
+import '../screens/home_screen.dart';
+import '../utils/user_prefs.dart';
+import '../widgets/custom_page_route.dart';
+import '../widgets/passwordTextField.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -50,34 +53,42 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   height: size.height * 0.025,
                 ),
 
                 //Headertext
-                Text(
-                  'Glad to see you back,',
-                  style: GoogleFonts.manrope(
-                    textStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Text(
-                  'Let\'s sign you in.',
-                  style: GoogleFonts.manrope(
-                    textStyle: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                Container(
+                  width: size.width * 0.8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Glad to see you back,',
+                        style: GoogleFonts.manrope(
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      Text(
+                        'Let\'s sign you in.',
+                        style: GoogleFonts.manrope(
+                          textStyle: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -100,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //sign up prompt
                 Container(
-                  width: size.width * 0.8,
+                  width: size.width * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -120,10 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         //Navigate to Sign Up Screen
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpScreen()),
+                          Navigator.of(context).push(
+                            CustomPageRoute(
+                              SignUpScreen(),
+                            ),
                           );
                         },
                         child: Text(
@@ -146,9 +157,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 //Button
-                WideButton(theme.accentColor, 'Sign In', () {
+                WideButton(theme.accentColor, 'Sign In', () async {
                   if (_formKey.currentState!.validate()) {
-                    print('Validator working');
+                    print('Signing user in');
+                    //Login
+                    await UserPreferences.setToken(
+                        'Some Random token that is not null');
+                    //Navigate to Home Screen
+                    Navigator.of(context).pushReplacement(
+                      CustomPageRoute(
+                        HomeScreen(),
+                      ),
+                    );
                   }
                 }),
 

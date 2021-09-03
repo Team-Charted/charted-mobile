@@ -1,7 +1,17 @@
+import 'package:charted/screens/login_screen.dart';
+import 'package:charted/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:charted/screens/home_screen.dart';
+import 'package:flutter/services.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  await UserPreferences.init();
+
+  print(UserPreferences.getToken());
+
   runApp(MyApp());
 }
 
@@ -22,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
 
       //Home screen
-      home: HomeScreen(),
+      home: UserPreferences.getToken() == null ? LoginScreen() : HomeScreen(),
     );
   }
 }

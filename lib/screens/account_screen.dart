@@ -1,7 +1,10 @@
-import '../widgets/wallet_details_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../widgets/wallet_details_card.dart';
+import '../screens/login_screen.dart';
+import '../utils/user_prefs.dart';
+import '../widgets/custom_page_route.dart';
 import '../widgets/wideButton.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -68,7 +71,16 @@ class AccountScreen extends StatelessWidget {
             Spacer(),
 
             //Signout Button
-            WideButton(_theme.highlightColor, 'Sign Out', () {}),
+            WideButton(_theme.highlightColor, 'Sign Out', () {
+              //Delete token
+              UserPreferences.setToken('');
+              //Navigate to Login Screen
+              Navigator.of(context).pushReplacement(
+                CustomPageRoute(
+                  LoginScreen(),
+                ),
+              );
+            }),
 
             SizedBox(
               height: _size.height * 0.02,
