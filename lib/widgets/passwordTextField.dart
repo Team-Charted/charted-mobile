@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class PasswordTextField extends StatelessWidget {
   final String _label;
   final String? Function(String?) _validator;
+  final TextEditingController _controller;
 
-  PasswordTextField(this._label, this._validator);
+  PasswordTextField(this._label, this._controller, this._validator);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class PasswordTextField extends StatelessWidget {
           ),
         ),
         validator: _validator,
+        controller: _controller,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(16.0),
           enabledBorder: OutlineInputBorder(

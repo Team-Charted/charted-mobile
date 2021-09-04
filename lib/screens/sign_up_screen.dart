@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:charted/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,6 +11,8 @@ import '../utils/user_prefs.dart';
 import '../widgets/custom_page_route.dart';
 import '../widgets/passwordTextField.dart';
 
+import 'package:http/http.dart' as http;
+
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -15,6 +20,23 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  //Text editing controllers
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _usernameController.dispose();
+    _phoneNumberController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,43 +116,82 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
 
                 //Name text field
-                TextFieldCustom('Name', _nameValidator),
+                TextFieldCustom(
+                  'Name',
+                  _nameController,
+                  _nameValidator,
+                ),
 
                 SizedBox(
                   height: size.height * 0.04,
                 ),
 
                 //Username text field
-                TextFieldCustom('Username', _usernameValidator),
+                TextFieldCustom(
+                  'Username',
+                  _usernameController,
+                  _usernameValidator,
+                ),
 
                 SizedBox(
                   height: size.height * 0.04,
                 ),
 
                 //Phone number text field
-                TextFieldCustom('Phone Number', _phoneNumberValidator),
+                TextFieldCustom(
+                  'Phone Number',
+                  _phoneNumberController,
+                  _phoneNumberValidator,
+                ),
 
                 SizedBox(
                   height: size.height * 0.04,
                 ),
 
                 //Email text field
-                TextFieldCustom('Email', _emailValidator),
+                TextFieldCustom(
+                  'Email',
+                  _emailController,
+                  _emailValidator,
+                ),
 
                 SizedBox(
                   height: size.height * 0.04,
                 ),
 
                 //Password text field
-                PasswordTextField('Password', _passwordValidator),
+                PasswordTextField(
+                  'Password',
+                  _passwordController,
+                  _passwordValidator,
+                ),
 
                 Spacer(),
 
                 //Sign Up Button
-                WideButton(theme.accentColor, 'Sign Up', () {
+                WideButton(theme.accentColor, 'Sign Up', () async {
                   if (_formKey.currentState!.validate()) {
                     //Send Create User Request
-                    //Set Token
+                    final _userData = UserData(
+                      _nameController.text,
+                      _emailController.text,
+                      _usernameController.text,
+                      _passwordController.text,
+                      _phoneNumberController.text,
+                    );
+
+                    try {
+                      final _response = await registerUser(_userData);
+
+                      //if (_response.statusCode == 200) {
+                      //   //Set user pref and navigate
+                      // } else {
+                      //   print(_response.body);
+                      // }
+                    } on Exception catch (e) {
+                      print(e.toString());
+                    }
+
                     UserPreferences.setToken('Some random non null string ');
                     //Navigate to Home screen
                     Navigator.of(context).pushReplacement(
@@ -149,6 +210,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  //Register Request
+  Future<http.Response> registerUser(UserData _user) {
+    return http.post(
+      Uri.parse('http://localhost:5000/api/users'),
+      body: jsonEncode(_user),
     );
   }
 

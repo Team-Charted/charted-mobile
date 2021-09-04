@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class TextFieldCustom extends StatelessWidget {
   final String _label;
   final String? Function(String?) _validator;
+  final TextEditingController _controller;
 
-  TextFieldCustom(this._label, this._validator);
+  TextFieldCustom(this._label, this._controller, this._validator);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class TextFieldCustom extends StatelessWidget {
             color: theme.highlightColor,
           ),
         ),
+        controller: _controller,
         validator: _validator,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(16.0),

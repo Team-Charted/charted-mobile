@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,6 +11,8 @@ import '../utils/user_prefs.dart';
 import '../widgets/custom_page_route.dart';
 import '../widgets/passwordTextField.dart';
 
+import 'package:http/http.dart' as http;
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,6 +20,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  String _email = '';
+  String _password = '';
+
+  //Text Controllers
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 //emailTextfield
-                TextFieldCustom('Email', _emailValidator),
+                TextFieldCustom('Email', _emailController, _emailValidator),
 
                 SizedBox(
                   height: size.height * 0.04,
@@ -105,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //PasswordTextField
                 //TextFieldCustom('Password', _passwordValidator),
-                PasswordTextField('Password', _passwordValidator),
+                PasswordTextField(
+                    'Password', _passwordController, _passwordValidator),
 
                 Spacer(),
 
@@ -159,8 +177,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Button
                 WideButton(theme.accentColor, 'Sign In', () async {
                   if (_formKey.currentState!.validate()) {
-                    print('Signing user in');
-                    //Login
+                    print('Sign in button tapped');
+                    _email = _emailController.text;
+                    _password = _passwordController.text;
+
+                    //Send request
+                    try {
+                      final _response = await _loginUser(_email, _password);
+
+                      //if success then login and save token
+                      if (_response.statusCode == 200) {
+                        //Update shared pref
+                        //Navigate
+                      } else {
+                        print(_response.body);
+                      }
+                    } on Exception catch (e) {
+                      print(
+                        e.toString(),
+                      );
+                    }
+
+                    //Update shared pref
                     await UserPreferences.setToken(
                         'Some Random token that is not null');
                     //Navigate to Home Screen
@@ -179,6 +217,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  //Register Request
+  Future<http.Response> _loginUser(String _email, String _password) {
+    return http.post(
+      Uri.parse('http://localhost:5000/api/auth'),
+      body: jsonEncode(
+        {"email": _email, "password": _password},
       ),
     );
   }
