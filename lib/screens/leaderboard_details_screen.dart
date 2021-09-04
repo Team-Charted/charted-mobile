@@ -1,47 +1,72 @@
-import 'package:charted/screens/my_album_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
 
 import '../models/leaderboard_data.dart';
 import '../widgets/chart_banner.dart';
 import '../widgets/custom_page_route.dart';
+import '../screens/my_album_screen.dart';
+import '../utils/user_prefs.dart';
 
-class LeaderboardDetailsScreen extends StatelessWidget {
+import 'package:http/http.dart' as http;
+
+class LeaderboardDetailsScreen extends StatefulWidget {
+  final String _id;
   final Color _bannerColor;
   final String _title;
   final String _issue;
 
-  LeaderboardDetailsScreen(this._bannerColor, this._title, this._issue);
+  LeaderboardDetailsScreen(
+      this._id, this._bannerColor, this._title, this._issue);
 
-  final List<LeaderboardData> _data = [
-    LeaderboardData('1', 'mizanxali', '180'),
-    LeaderboardData('2', 'zaid', '178.5'),
-    LeaderboardData('3', 'neel_boi', '160'),
-    LeaderboardData('4', 'cuber69', '150'),
-    LeaderboardData('5', 'sharma.aman', '140'),
-    LeaderboardData('6', 'smit.barmase', '130'),
-    LeaderboardData('7', 'itsaadarsh', '120'),
-    LeaderboardData('8', 'usktuber', '110'),
-    LeaderboardData('9', 'chiru69', '90'),
-    LeaderboardData('10', 'mizanxali', '180'),
-    LeaderboardData('11', 'zaid', '178.5'),
-    LeaderboardData('12', 'neel_boi', '160'),
-    LeaderboardData('13', 'cuber69', '150'),
-    LeaderboardData('14', 'sharma.aman', '140'),
-    LeaderboardData('15', 'smit.barmase', '130'),
-    LeaderboardData('16', 'itsaadarsh', '120'),
-    LeaderboardData('17', 'usktuber', '110'),
-    LeaderboardData('18', 'chiru69', '90'),
-    LeaderboardData('19', 'mizanxali', '180'),
-    LeaderboardData('20', 'zaid', '178.5'),
-    LeaderboardData('21', 'neel_boi', '160'),
-    LeaderboardData('22', 'cuber69', '150'),
-    LeaderboardData('23', 'sharma.aman', '140'),
-    LeaderboardData('24', 'smit.barmase', '130'),
-    LeaderboardData('25', 'itsaadarsh', '120'),
-    LeaderboardData('26', 'usktuber', '110'),
-    LeaderboardData('27', 'chiru69', '90'),
+  @override
+  _LeaderboardDetailsScreenState createState() =>
+      _LeaderboardDetailsScreenState();
+}
+
+class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
+  List<LeaderboardData> _rankings = [
+    LeaderboardData('1', 'mizanxali', 180),
+    LeaderboardData('2', 'zaid', 178.5),
+    LeaderboardData('3', 'neel_boi', 160),
   ];
+
+  //Get Leaderboard Data
+  void getChartResult(String _id) async {
+    final String _token = UserPreferences.getToken() ?? '';
+
+    try {
+      http.Response _response = await http.get(
+        Uri.parse('https://charted-server.herokuapp.com/api/results/' + _id),
+        headers: {
+          'x-auth-token': _token,
+        },
+      );
+
+      if (_response.statusCode == 200) {
+        List _body = json.decode(_response.body) as List;
+
+        List<LeaderboardData> _data = _body.map((e) {
+          return LeaderboardData.fromJson(e);
+        }).toList();
+
+        print(_data.toString());
+
+        setState(() {
+          _rankings.clear();
+          _rankings = []..addAll(_data);
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getChartResult(widget._id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +91,10 @@ class LeaderboardDetailsScreen extends StatelessWidget {
             Navigator.of(context).push(
               CustomPageRoute(
                 MyAlbumScreen(
-                  this._bannerColor,
-                  this._title,
-                  this._issue,
+                  this.widget._id,
+                  this.widget._bannerColor,
+                  this.widget._title,
+                  this.widget._issue,
                 ),
               ),
             );
@@ -106,9 +132,9 @@ class LeaderboardDetailsScreen extends StatelessWidget {
             ChartBanner(
                 theme: _theme,
                 size: _size,
-                title: _title,
-                bannerColor: _bannerColor,
-                issue: _issue),
+                title: widget._title,
+                bannerColor: widget._bannerColor,
+                issue: widget._issue),
 
             SizedBox(
               height: _size.height * 0.02,
@@ -122,15 +148,15 @@ class LeaderboardDetailsScreen extends StatelessWidget {
                     separatorBuilder: (context, index) => Divider(
                           color: _theme.highlightColor,
                         ),
-                    itemCount: _data.length,
+                    itemCount: _rankings.length,
                     itemBuilder: (context, index) {
-                      final item = _data[index];
+                      final item = _rankings[index];
 
                       //List tile
                       return ListTile(
                         tileColor: _theme.primaryColor,
                         leading: Text(
-                          item.getId(),
+                          (index + 1).toString(),
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             color: Colors.white,
@@ -146,7 +172,7 @@ class LeaderboardDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         trailing: Text(
-                          item.getPoints(),
+                          item.getPoints().toStringAsFixed(2),
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             color: _theme.highlightColor,

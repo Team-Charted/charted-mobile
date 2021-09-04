@@ -187,8 +187,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       //if success then login and save token
                       if (_response.statusCode == 200) {
+                        print(_response);
+
                         //Update shared pref
-                        //Navigate
+                        final _body = json.decode(_response.body);
+                        await UserPreferences.setToken(_body['token']);
+
+                        //Navigate to Home Screen
+                        Navigator.of(context).pushReplacement(
+                          CustomPageRoute(
+                            HomeScreen(),
+                          ),
+                        );
                       } else {
                         print(_response.body);
                       }
@@ -197,16 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         e.toString(),
                       );
                     }
-
-                    //Update shared pref
-                    await UserPreferences.setToken(
-                        'Some Random token that is not null');
-                    //Navigate to Home Screen
-                    Navigator.of(context).pushReplacement(
-                      CustomPageRoute(
-                        HomeScreen(),
-                      ),
-                    );
                   }
                 }),
 
@@ -224,7 +224,8 @@ class _LoginScreenState extends State<LoginScreen> {
   //Register Request
   Future<http.Response> _loginUser(String _email, String _password) {
     return http.post(
-      Uri.parse('http://localhost:5000/api/auth'),
+      Uri.parse('https://charted-server.herokuapp.com/api/auth'),
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
         {"email": _email, "password": _password},
       ),

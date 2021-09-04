@@ -1,10 +1,11 @@
-import 'package:charted/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../screens/leaderboard_details_screen.dart';
+import '../widgets/custom_page_route.dart';
 
 class ResultCard extends StatelessWidget {
+  final String id;
   final String title;
   final Color cardColor;
   final String prizePool;
@@ -12,6 +13,7 @@ class ResultCard extends StatelessWidget {
   final String issue;
 
   ResultCard({
+    required this.id,
     required this.title,
     required this.cardColor,
     required this.prizePool,
@@ -28,7 +30,7 @@ class ResultCard extends StatelessWidget {
       height: size.height * 0.24,
       width: size.width * 0.85,
       decoration: BoxDecoration(
-        color: cardColor,
+        color: this.cardColor,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Column(
@@ -45,7 +47,7 @@ class ResultCard extends StatelessWidget {
               children: [
                 //Title
                 Text(
-                  title,
+                  this.title,
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     color: Colors.white,
@@ -66,7 +68,7 @@ class ResultCard extends StatelessWidget {
                       width: size.width * 0.005,
                     ),
                     Text(
-                      '\$' + prizePool,
+                      '\$' + this.prizePool,
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 15,
@@ -88,7 +90,7 @@ class ResultCard extends StatelessWidget {
                       width: size.width * 0.005,
                     ),
                     Text(
-                      '\$' + winnings,
+                      '\$' + this.winnings,
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 15,
@@ -120,7 +122,7 @@ class ResultCard extends StatelessWidget {
 
                 //Date of issue
                 Text(
-                  issue,
+                  this.issue,
                   style: GoogleFonts.inter(
                     color: Colors.white,
                     fontSize: 12,
@@ -132,13 +134,17 @@ class ResultCard extends StatelessWidget {
                 //View Button
                 IconButton(
                   onPressed: () {
-                    print('Show ' + title + ' leaderboard');
+                    print('Show leaderboard with id : ' + this.id);
 
                     //Custom Navigation
                     Navigator.of(context).push(
                       CustomPageRoute(
                         LeaderboardDetailsScreen(
-                            this.cardColor, this.title, this.issue),
+                          this.id,
+                          this.cardColor,
+                          this.title,
+                          this.issue,
+                        ),
                       ),
                     );
                   },

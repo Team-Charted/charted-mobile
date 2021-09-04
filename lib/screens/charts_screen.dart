@@ -1,8 +1,13 @@
-import 'package:charted/models/chart_data.dart';
+import 'dart:convert';
+
+import 'package:charted/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/chart_card.dart';
+import '../models/chart_data.dart';
+
+import 'package:http/http.dart' as http;
 
 class ChartsScreen extends StatefulWidget {
   @override
@@ -10,6 +15,43 @@ class ChartsScreen extends StatefulWidget {
 }
 
 class _ChartsScreenState extends State<ChartsScreen> {
+  //Charts data
+  List<ChartData> _charts = [];
+
+  //Get Chart Data
+  void fetchCharts() async {
+    final String _token = UserPreferences.getToken() ?? '';
+
+    try {
+      http.Response _response = await http.get(
+        Uri.parse('https://charted-server.herokuapp.com/api/charts'),
+        headers: {
+          'x-auth-token': _token,
+        },
+      );
+
+      if (_response.statusCode == 200) {
+        List _body = json.decode(_response.body) as List;
+
+        List<ChartData> _data =
+            _body.map((e) => ChartData.fromJson(e)).toList();
+
+        setState(() {
+          _charts.clear();
+          _charts = []..addAll(_data);
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCharts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
@@ -18,64 +60,6 @@ class _ChartsScreenState extends State<ChartsScreen> {
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
     final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
     //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
-
-    //Charts data
-    final List<ChartData> _charts = [
-      ChartData(
-        '1',
-        'Billboard Hot 100',
-        50,
-        'Weekly',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-      ChartData(
-        '2',
-        'Spotify Top 200: Global',
-        25,
-        'Daily',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-      ChartData(
-        '3',
-        'Billboard Hot 100',
-        50,
-        'Weekly',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-      ChartData(
-        '4',
-        'Spotify Top 200: Global',
-        25,
-        'Daily',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-      ChartData(
-        '5',
-        'Billboard Hot 100',
-        50,
-        'Weekly',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-      ChartData(
-        '6',
-        'Spotify Top 200: Global',
-        25,
-        'Daily',
-        '2021-07-12',
-        '1234567891234',
-        0,
-      ),
-    ];
 
     //Appbar
     final _appBar = AppBar(
@@ -91,9 +75,11 @@ class _ChartsScreenState extends State<ChartsScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            fetchCharts();
+          },
           icon: Icon(
-            Icons.menu_rounded,
+            Icons.refresh_rounded,
             color: Colors.white,
             size: 25.0,
           ),
@@ -139,7 +125,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
                 return ChartCard(
                   title: item.getName(),
                   cardColor: _bgColor,
-                  prizePool: item.getV().toString(),
+                  prizePool: item.getPrizePool().toString(),
                   cost: item.cost.toString(),
                   time: item.endTime,
                   issue: _issue,

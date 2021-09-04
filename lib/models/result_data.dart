@@ -1,35 +1,55 @@
-import 'package:charted/models/result_chart.dart';
+import '../models/chart_data.dart';
 
-class Result {
+class ResultData {
   /*
   {
-        "_id": "611ed0d18fafe12e9c6e3942",
+        "_id": "612514b386e19f21c4301e83",
         "chart": {
             "_id": "6111311849009b0df46203ae",
             "name": "Billboard Hot 100",
             "prizePool": 10000,
             "cost": 25,
-            "type": "Weekly"
+            "type": "Weekly",
+            "__v": 0,
+            "date": "07/16/2021",
+            "endTime": "1629321480536"
         },
-        "date": "2021-08-21",
-        "calculatedAt": "2021-08-19T21:44:49.451Z",
+        "date": "2021-08-28",
+        "calculatedAt": "2021-08-24T15:48:03.271Z",
+				"winnings": 10000,
         "__v": 0
-    },
+    }
   */
   final String id;
-  final ResultChart chart;
+  final ChartData chart;
   final String date;
   final String calculatedAt;
-  final double _v;
+  final double winnings;
 
-  Result(this.id, this.chart, this.date, this.calculatedAt, this._v);
+  ResultData({
+    required this.id,
+    required this.chart,
+    required this.date,
+    required this.calculatedAt,
+    required this.winnings,
+  });
 
   //Getters
   String getId() => id;
 
-  ResultChart getChart() => chart;
+  ChartData getChart() => chart;
 
   String getDate() => date;
 
-  double getV() => _v;
+  String getCalculatedAt() => calculatedAt;
+
+  double getWinnings() => winnings;
+
+  //Decoding json object
+  ResultData.fromJson(Map<String, dynamic> json)
+      : id = json['_id'],
+        chart = json['chart'],
+        date = json['date'],
+        calculatedAt = json['calculatedAt'],
+        winnings = json['winnings'].toDouble();
 }

@@ -183,22 +183,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     try {
                       final _response = await registerUser(_userData);
 
-                      //if (_response.statusCode == 200) {
-                      //   //Set user pref and navigate
-                      // } else {
-                      //   print(_response.body);
-                      // }
+                      if (_response.statusCode == 200) {
+                        //Set user pref
+                        final _body = json.decode(_response.body);
+                        UserPreferences.setToken(_body['token']);
+                        //Navigate to Home screen
+                        Navigator.of(context).pushReplacement(
+                          CustomPageRoute(
+                            HomeScreen(),
+                          ),
+                        );
+                      } else {
+                        print(_response.body);
+                      }
                     } on Exception catch (e) {
                       print(e.toString());
                     }
-
-                    UserPreferences.setToken('Some random non null string ');
-                    //Navigate to Home screen
-                    Navigator.of(context).pushReplacement(
-                      CustomPageRoute(
-                        HomeScreen(),
-                      ),
-                    );
                   }
                 }),
 
@@ -216,7 +216,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   //Register Request
   Future<http.Response> registerUser(UserData _user) {
     return http.post(
-      Uri.parse('http://localhost:5000/api/users'),
+      Uri.parse('https://charted-server.herokuapp.com/api/users'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(_user),
     );
   }
