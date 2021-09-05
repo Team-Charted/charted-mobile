@@ -1,7 +1,7 @@
-import 'package:charted/models/user_details.dart';
+import 'package:charted/providers/user_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../widgets/wallet_details_card.dart';
 import '../screens/login_screen.dart';
@@ -9,49 +9,21 @@ import '../utils/user_prefs.dart';
 import '../widgets/custom_page_route.dart';
 import '../widgets/wideButton.dart';
 
-import 'package:http/http.dart' as http;
-
 class AccountScreen extends StatefulWidget {
   @override
   _AccountScreenState createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  late UserDetails _user;
   bool _isLoading = true;
-
-  //Get User Data
-  void getUserData() async {
-    final String _token = UserPreferences.getToken() ?? '';
-
-    try {
-      http.Response _response = await http.get(
-        Uri.parse('https://charted-server.herokuapp.com/api/auth'),
-        headers: {
-          'x-auth-token': _token,
-        },
-      );
-
-      if (_response.statusCode == 200) {
-        Map<String, dynamic> _body =
-            json.decode(_response.body) as Map<String, dynamic>;
-
-        UserDetails _data = UserDetails.fromJson(_body);
-
-        setState(() {
-          _user = _data;
-          _isLoading = false;
-        });
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    getUserData();
+    Provider.of<UserDetails>(context, listen: false).getUserData();
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -77,7 +49,10 @@ class _AccountScreenState extends State<AccountScreen> {
             setState(() {
               _isLoading = true;
             });
-            getUserData();
+            Provider.of<UserDetails>(context, listen: false).getUserData();
+            setState(() {
+              _isLoading = false;
+            });
           },
           icon: Icon(
             Icons.refresh_rounded,
@@ -111,8 +86,13 @@ class _AccountScreenState extends State<AccountScreen> {
             //User Details Card
             _isLoading
                 ? Container()
-                : _userInfoCard(_theme, _size, _user.name, _user.username,
-                    _user.email, _user.phoneNumber),
+                : _userInfoCard(
+                    _theme,
+                    _size,
+                    context.read<UserDetails>().name,
+                    context.read<UserDetails>().username,
+                    context.read<UserDetails>().email,
+                    context.read<UserDetails>().phoneNumber),
 
             SizedBox(
               height: _size.height * 0.02,
@@ -124,10 +104,11 @@ class _AccountScreenState extends State<AccountScreen> {
                 : WalletDetailsCard(
                     theme: _theme,
                     size: _size,
-                    balance: _user.balance.toStringAsFixed(2),
-                    email: _user.email,
-                    name: _user.name,
-                    phoneNumber: _user.phoneNumber,
+                    balance:
+                        context.watch<UserDetails>().balance.toStringAsFixed(2),
+                    email: context.read<UserDetails>().email,
+                    name: context.read<UserDetails>().name,
+                    phoneNumber: context.read<UserDetails>().phoneNumber,
                   ),
 
             Spacer(),

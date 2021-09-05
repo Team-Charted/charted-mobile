@@ -1,7 +1,9 @@
+import 'package:charted/providers/user_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../utils/user_prefs.dart';
 
@@ -37,7 +39,7 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
     final String _token = UserPreferences.getToken() ?? '';
 
     http.Response _response = await http.post(
-      Uri.parse('https://charted-server.herokuapp.com/transactions/add'),
+      Uri.parse('https://charted-server.herokuapp.com/api/transactions/add'),
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': _token,
@@ -59,12 +61,14 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     // Do something when payment succeeds
+    final String _token = UserPreferences.getToken() ?? '';
     try {
       http.Response _response = await http.post(
         Uri.parse(
-            'https://charted-server.herokuapp.com/transactions/add/success'),
+            'https://charted-server.herokuapp.com/api/transactions/add/success'),
         headers: {
           'Content-Type': 'application/json',
+          'x-auth-token': _token,
         },
         body: json.encode({
           'amount': _addAmount,
@@ -75,11 +79,16 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
         }),
       );
 
+      print(_response.body);
+
       if (_response.statusCode == 200) {
         Map<String, dynamic> _body =
             json.decode(_response.body) as Map<String, dynamic>;
 
         //Update balance using provider
+        context.read<UserDetails>().addMoney(
+              _body['amount'].toDouble(),
+            );
       }
     } on Exception catch (e) {
       print(e);
@@ -141,49 +150,41 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
                 //Add Button
                 _walletCardIconButton(widget.theme, widget.size, 'Add',
                     Icons.arrow_downward_rounded, () async {
-                  print('Add button tapped');
+                  final _response = await createOrder();
 
-                  try {
-                    final _response = await createOrder();
+                  if (_response.statusCode == 200) {
+                    Map<String, dynamic> _body =
+                        json.decode(_response.body) as Map<String, dynamic>;
 
-                    if (_response.statusCode == 200) {
-                      Map<String, dynamic> _body =
-                          json.decode(_response.body) as Map<String, dynamic>;
+                    _orderId = _body['id'].toString();
 
-                      _orderId = _body['id'].toString();
+                    _addAmount = _body['amount'].toString();
 
-                      print('BODYYYYYYYYYYYYYYYYYY' + _body.toString());
+                    var options = {
+                      'key': 'rzp_test_QmzLview4RmIzC',
+                      'amount': _addAmount, //in the smallest currency sub-unit.
+                      'name': 'charted',
+                      'order_id':
+                          _orderId, // Generate order_id using Orders API
+                      'prefill': {
+                        'contact': widget.phoneNumber,
+                        'email': widget.email,
+                        'name': widget.name,
+                      }
+                    };
 
-                      _addAmount = _body['amount'].toString();
-                      print('AMOUNTTTTTTTTTTT' + _addAmount);
+                    try {
+                      _razorpay.open(options);
+                    } catch (e) {
+                      debugPrint('Error: e');
                     }
-                  } on Exception catch (e) {
-                    print(e);
-                  }
-
-                  var options = {
-                    'key': 'rzp_test_QmzLview4RmIzC',
-                    'amount': _addAmount, //in the smallest currency sub-unit.
-                    'name': 'charted',
-                    'order_id': _orderId, // Generate order_id using Orders API
-                    'prefill': {
-                      'contact': widget.phoneNumber,
-                      'email': widget.email,
-                      'name': widget.name,
-                    }
-                  };
-
-                  try {
-                    _razorpay.open(options);
-                  } catch (e) {
-                    debugPrint('Error: e');
                   }
                 }),
 
                 //Withdraw Button
                 _walletCardIconButton(widget.theme, widget.size, 'Withdraw',
                     Icons.arrow_upward_rounded, () {
-                  print('Withdraw button tapped');
+                  context.read<UserDetails>().withdraw(100);
                 }),
 
                 //History Button
