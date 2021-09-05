@@ -1,11 +1,13 @@
 import 'dart:convert';
 
-import 'package:charted/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/chart_card.dart';
 import '../models/chart_data.dart';
+import 'login_screen.dart';
+import '../utils/user_prefs.dart';
+import '../widgets/custom_page_route.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -17,6 +19,7 @@ class ChartsScreen extends StatefulWidget {
 class _ChartsScreenState extends State<ChartsScreen> {
   //Charts data
   List<ChartData> _charts = [];
+  bool isLoading = true;
 
   //Get Chart Data
   void fetchCharts() async {
@@ -39,7 +42,23 @@ class _ChartsScreenState extends State<ChartsScreen> {
         setState(() {
           _charts.clear();
           _charts = []..addAll(_data);
+          isLoading = false;
         });
+      } else if (_response.statusCode == 401) {
+        //User unauthorized
+        //Logout and navigate
+        //Snackbar
+        final snackBar =
+            SnackBar(content: Text('Session expired. Please login again'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        //Delete token
+        UserPreferences.removeToken();
+        Navigator.of(context).pushReplacement(
+          CustomPageRoute(
+            LoginScreen(),
+          ),
+        );
       }
     } on Exception catch (e) {
       print(e);
@@ -76,6 +95,9 @@ class _ChartsScreenState extends State<ChartsScreen> {
       actions: [
         IconButton(
           onPressed: () {
+            setState(() {
+              isLoading = true;
+            });
             fetchCharts();
           },
           icon: Icon(
@@ -104,33 +126,36 @@ class _ChartsScreenState extends State<ChartsScreen> {
 
           //Main List View
 
-          child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(
-                    height: _size.height * 0.02,
-                  ),
-              itemCount: _charts.length,
-              itemBuilder: (context, index) {
-                final item = _charts[index];
+          child: isLoading
+              ? Container()
+              : ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: _size.height * 0.02,
+                      ),
+                  itemCount: _charts.length,
+                  itemBuilder: (context, index) {
+                    final item = _charts[index];
 
-                //Determine color of card
-                final _bgColor = (item.name == 'Billboard Hot 100')
-                    ? _billboardBlue
-                    : _spotifyGreen;
+                    //Determine color of card
+                    final _bgColor = (item.name == 'Billboard Hot 100')
+                        ? _billboardBlue
+                        : _spotifyGreen;
 
-                //Determine issue
-                final String _issue = (item.type == 'Weekly')
-                    ? 'Week of ' + item.date
-                    : 'Day of ' + item.date;
+                    //Determine issue
+                    final String _issue = (item.type == 'Weekly')
+                        ? 'Week of ' + item.date
+                        : 'Day of ' + item.date;
 
-                return ChartCard(
-                  title: item.getName(),
-                  cardColor: _bgColor,
-                  prizePool: item.getPrizePool().toString(),
-                  cost: item.cost.toString(),
-                  time: item.endTime,
-                  issue: _issue,
-                );
-              }),
+                    return ChartCard(
+                      chartId: item.id,
+                      title: item.getName(),
+                      cardColor: _bgColor,
+                      prizePool: item.getPrizePool().toString(),
+                      cost: item.cost.toString(),
+                      time: item.endTime,
+                      issue: _issue,
+                    );
+                  }),
         ),
       ),
     );

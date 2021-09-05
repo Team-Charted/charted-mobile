@@ -1,14 +1,35 @@
+import 'package:charted/providers/create_album_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/custom_page_route.dart';
 import '../widgets/smallButton.dart';
-import '../models/song_data.dart';
 import '../screens/confirm_album_screen.dart';
 import '../widgets/chart_banner.dart';
 import '../widgets/song_result_list_tile.dart';
 
-class CreateAlbumScreen extends StatelessWidget {
+class CreateAlbumScreen extends StatefulWidget {
+  final String _chartId;
+  final String _title;
+  final Color _bannerColor;
+  final String _issue;
+
+  CreateAlbumScreen(this._title, this._bannerColor, this._issue, this._chartId);
+
+  @override
+  _CreateAlbumScreenState createState() => _CreateAlbumScreenState();
+}
+
+class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<CreateAlbum>(context, listen: false).searchResults.clear();
+    Provider.of<CreateAlbum>(context, listen: false).selectedSongs.clear();
+    Provider.of<CreateAlbum>(context, listen: false).getAlbum(widget._chartId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
@@ -18,114 +39,6 @@ class CreateAlbumScreen extends StatelessWidget {
     final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
     //final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
     //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
-
-    //Search Data
-    final List<Song> _songsData = [
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: true,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-      Song(
-        title: 'God’s Plan',
-        artist: 'Drake',
-        imageURL:
-            'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-        credits: 8.5,
-        leadSingle: false,
-      ),
-    ];
 
     //Appbar
     final _appBar = AppBar(
@@ -143,7 +56,7 @@ class CreateAlbumScreen extends StatelessWidget {
         Container(
           child: Center(
             child: Text(
-              'Credits : 98.5',
+              'Credits : ' + context.watch<CreateAlbum>().credits.toString(),
               style: GoogleFonts.inter(
                 color: _theme.highlightColor,
                 fontSize: 16,
@@ -177,11 +90,11 @@ class CreateAlbumScreen extends StatelessWidget {
 
             //Banner
             ChartBanner(
-              bannerColor: _billboardBlue,
+              bannerColor: widget._bannerColor,
               size: _size,
               theme: _theme,
-              issue: 'Week of July 31 2021',
-              title: 'Billboard Hot 100',
+              issue: widget._issue,
+              title: widget._title,
             ),
 
             SizedBox(
@@ -192,6 +105,11 @@ class CreateAlbumScreen extends StatelessWidget {
             Container(
               width: _size.width * 0.9,
               child: TextField(
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
                   enabledBorder: OutlineInputBorder(
@@ -222,6 +140,8 @@ class CreateAlbumScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                onSubmitted: (value) =>
+                    context.read<CreateAlbum>().searchSongs(value),
               ),
             ),
 
@@ -239,12 +159,21 @@ class CreateAlbumScreen extends StatelessWidget {
                   separatorBuilder: (context, index) => Divider(
                     color: _theme.highlightColor,
                   ),
-                  itemCount: _songsData.length,
+                  itemCount: context.watch<CreateAlbum>().searchResults.length,
                   itemBuilder: (context, index) {
-                    final item = _songsData[index];
+                    final item =
+                        context.watch<CreateAlbum>().searchResults[index];
 
                     //List Tile
-                    return SongResultListTile(index, item);
+                    return SongResultListTile(
+                        index,
+                        item,
+                        Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 25.0,
+                          color: _theme.accentColor,
+                        ),
+                        () => context.read<CreateAlbum>().addSong(item));
                   },
                 ),
               ),
@@ -268,7 +197,7 @@ class CreateAlbumScreen extends StatelessWidget {
                       builder: (context) => _previewSheet(
                         _theme,
                         _size,
-                        _songsData,
+                        context.watch<CreateAlbum>().selectedSongs,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
@@ -284,10 +213,12 @@ class CreateAlbumScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       CustomPageRoute(
                         ConfirmAlbumScreen(
-                          _billboardBlue,
-                          'Billboard Hot 100',
-                          'Week of July 31 2021',
-                          7.5,
+                          widget._chartId,
+                          widget._bannerColor,
+                          widget._title,
+                          widget._issue,
+                          Provider.of<CreateAlbum>(context, listen: false)
+                              .credits,
                         ),
                       ),
                     );
@@ -323,7 +254,15 @@ class CreateAlbumScreen extends StatelessWidget {
             final item = _songsData[index];
 
             //List tile
-            return SongResultListTile(index, item);
+            return SongResultListTile(
+                index,
+                item,
+                Icon(
+                  Icons.remove_circle_outline,
+                  size: 25.0,
+                  color: _theme.accentColor,
+                ),
+                () => context.read<CreateAlbum>().removeSong(item));
           },
         ),
       );

@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/song_data.dart';
 
 class SongResultListTile extends StatelessWidget {
-  final int index;
-  final Song item;
+  final int _index;
+  final Song _item;
+  final Icon _icon;
+  final Function() _action;
 
-  const SongResultListTile(this.index, this.item);
+  const SongResultListTile(this._index, this._item, this._icon, this._action);
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +20,13 @@ class SongResultListTile extends StatelessWidget {
       contentPadding: EdgeInsets.all(0.0),
       tileColor: _theme.primaryColor,
       leading: Image.network(
-        item.imageURL,
+        _item.imageURL,
         fit: BoxFit.fill,
         width: _size.width * 0.2,
         height: _size.width * 0.2,
       ),
       title: Text(
-        item.getTitle(),
+        _item.getTitle(),
         style: GoogleFonts.inter(
           fontSize: 15,
           color: Colors.white,
@@ -32,7 +34,7 @@ class SongResultListTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        item.getArtist(),
+        _item.getArtist(),
         style: GoogleFonts.inter(
           fontSize: 14,
           color: _theme.highlightColor,
@@ -46,7 +48,7 @@ class SongResultListTile extends StatelessWidget {
           children: [
             //Cost
             Text(
-              '8.5',
+              _item.getValue().toString(),
               style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -56,18 +58,8 @@ class SongResultListTile extends StatelessWidget {
 
             //Add Button
             IconButton(
-              onPressed: () {
-                print('Item at ' +
-                    index.toString() +
-                    ' ' +
-                    item.getTitle() +
-                    ' added to album');
-              },
-              icon: Icon(
-                Icons.add_circle_outline_rounded,
-                color: _theme.accentColor,
-                size: 30,
-              ),
+              onPressed: _action,
+              icon: _icon,
             ),
           ],
         ),

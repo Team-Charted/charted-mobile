@@ -16,38 +16,8 @@ class ResultsScreen extends StatefulWidget {
 
 class _ResultsScreenState extends State<ResultsScreen> {
   //Result Data
-  List<ResultData> _results = [
-    ResultData(
-      id: '611ed0d18fafe12e9c6e3942',
-      chart: ChartData(
-        id: '6111311849009b0df46203ae',
-        name: 'Billboard Hot 100',
-        prizePool: 10000,
-        cost: 25,
-        type: 'Weekly',
-        date: '2021-08-21',
-        endTime: '2021-08-19T21:44:49.451Z',
-      ),
-      date: '2021-08-21',
-      calculatedAt: '2021-08-19T21:44:49.451Z',
-      winnings: 1000,
-    ),
-    ResultData(
-      id: '611ed0d18fafe12e9c6e3942',
-      chart: ChartData(
-        id: '6111311849009b0df46203ae',
-        name: 'Spotify Top 200: Global',
-        prizePool: 10000,
-        cost: 25,
-        type: 'Daily',
-        date: '2021-08-21',
-        endTime: '2021-08-19T21:44:49.451Z',
-      ),
-      date: '2021-08-21',
-      calculatedAt: '2021-08-19T21:44:49.451Z',
-      winnings: 800,
-    ),
-  ];
+  List<ResultData> _results = [];
+  bool _isLoading = true;
 
   //Get results Data
   void fetchResults() async {
@@ -72,6 +42,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
         setState(() {
           _results.clear();
           _results = []..addAll(_data);
+          _isLoading = false;
         });
       }
     } on Exception catch (e) {
@@ -109,6 +80,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
       actions: [
         IconButton(
           onPressed: () {
+            setState(() {
+              _isLoading = true;
+            });
             fetchResults();
           },
           icon: Icon(
@@ -140,33 +114,35 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
           //Main List View
 
-          child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(
-                    height: _size.height * 0.02,
-                  ),
-              itemCount: _results.length,
-              itemBuilder: (context, index) {
-                final item = _results[index];
+          child: _isLoading
+              ? Container()
+              : ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: _size.height * 0.02,
+                      ),
+                  itemCount: _results.length,
+                  itemBuilder: (context, index) {
+                    final item = _results[index];
 
-                //Determine color of card
-                final _bgColor = (item.chart.name == 'Billboard Hot 100')
-                    ? _billboardBlue
-                    : _spotifyGreen;
+                    //Determine color of card
+                    final _bgColor = (item.chart.name == 'Billboard Hot 100')
+                        ? _billboardBlue
+                        : _spotifyGreen;
 
-                //Determine issue
-                final String _issue = (item.chart.type == 'Weekly')
-                    ? 'Week of ' + item.date
-                    : 'Day of ' + item.date;
+                    //Determine issue
+                    final String _issue = (item.chart.type == 'Weekly')
+                        ? 'Week of ' + item.date
+                        : 'Day of ' + item.date;
 
-                return ResultCard(
-                  id: item.getId(),
-                  title: item.chart.getName(),
-                  cardColor: _bgColor,
-                  prizePool: item.chart.prizePool.toString(),
-                  winnings: item.winnings.toString(),
-                  issue: _issue,
-                );
-              }),
+                    return ResultCard(
+                      id: item.getId(),
+                      title: item.chart.getName(),
+                      cardColor: _bgColor,
+                      prizePool: item.chart.prizePool.toString(),
+                      winnings: item.winnings.toString(),
+                      issue: _issue,
+                    );
+                  }),
         ),
       ),
     );

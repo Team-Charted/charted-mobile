@@ -5,6 +5,7 @@ import 'custom_page_route.dart';
 import '../screens/create_album_screen.dart';
 
 class ChartCard extends StatelessWidget {
+  final String chartId;
   final String title;
   final Color cardColor;
   final String prizePool;
@@ -13,6 +14,7 @@ class ChartCard extends StatelessWidget {
   final String issue;
 
   ChartCard({
+    required this.chartId,
     required this.title,
     required this.cardColor,
     required this.prizePool,
@@ -147,7 +149,8 @@ class ChartCard extends StatelessWidget {
                     print('Add ' + title + ' chart');
                     Navigator.of(context).push(
                       CustomPageRoute(
-                        CreateAlbumScreen(),
+                        CreateAlbumScreen(this.title, this.cardColor,
+                            this.issue, this.chartId),
                       ),
                     );
                   },

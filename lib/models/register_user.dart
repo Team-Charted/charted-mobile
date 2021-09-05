@@ -7,14 +7,14 @@
     "phoneNumber": "9810157693"
 }
 */
-class UserData {
+class RegisterUser {
   final String name;
   final String email;
   final String username;
   final String password;
   final String phoneNumber;
 
-  UserData(
+  RegisterUser(
       this.name, this.email, this.username, this.password, this.phoneNumber);
 
   //Getters
@@ -29,7 +29,7 @@ class UserData {
   String getPhoneNumber() => this.phoneNumber;
 
   //Decoding json object
-  UserData.fromJson(Map<String, dynamic> json)
+  RegisterUser.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         email = json['email'],
         username = json['username'],

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
 import '../utils/user_prefs.dart';
+import '../providers/create_album_provider.dart';
+import '../providers/user_details_provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +16,13 @@ Future main() async {
 
   print(UserPreferences.getToken());
 
-  runApp(MyApp());
+  runApp(MultiProvider(
+    child: MyApp(),
+    providers: [
+      ChangeNotifierProvider(create: (_) => CreateAlbum()),
+      ChangeNotifierProvider(create: (_) => UserDetails())
+    ],
+  ));
 }
 
 class MyApp extends StatelessWidget {

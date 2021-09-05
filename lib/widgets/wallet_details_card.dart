@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'dart:convert';
+
+import '../utils/user_prefs.dart';
+
+import 'package:http/http.dart' as http;
 
 class WalletDetailsCard extends StatefulWidget {
   final theme;
   final size;
   final String balance;
+  final String name;
+  final String email;
+  final String phoneNumber;
 
-  const WalletDetailsCard(this.theme, this.size, this.balance);
+  const WalletDetailsCard({
+    this.theme,
+    this.size,
+    required this.balance,
+    required this.name,
+    required this.email,
+    required this.phoneNumber,
+  });
 
   @override
   _WalletDetailsCardState createState() => _WalletDetailsCardState();
@@ -15,6 +30,23 @@ class WalletDetailsCard extends StatefulWidget {
 
 class _WalletDetailsCardState extends State<WalletDetailsCard> {
   late Razorpay _razorpay;
+  late String _orderId;
+  late String _addAmount;
+
+  Future<http.Response> createOrder() async {
+    final String _token = UserPreferences.getToken() ?? '';
+
+    http.Response _response = await http.post(
+      Uri.parse('https://charted-server.herokuapp.com/transactions/add'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': _token,
+      },
+      body: json.encode({"amount": 100}),
+    );
+
+    return _response;
+  }
 
   @override
   void initState() {
@@ -25,9 +57,35 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     // Do something when payment succeeds
+    try {
+      http.Response _response = await http.post(
+        Uri.parse(
+            'https://charted-server.herokuapp.com/transactions/add/success'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'amount': _addAmount,
+          'orderCreationId': _orderId,
+          'razorpayPaymentId': response.paymentId,
+          'razorpayOrderId': response.orderId,
+          'razorpaySignature': response.signature,
+        }),
+      );
+
+      if (_response.statusCode == 200) {
+        Map<String, dynamic> _body =
+            json.decode(_response.body) as Map<String, dynamic>;
+
+        //Update balance using provider
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
   }
+
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
   }
@@ -84,15 +142,34 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
                 _walletCardIconButton(widget.theme, widget.size, 'Add',
                     Icons.arrow_downward_rounded, () async {
                   print('Add button tapped');
+
+                  try {
+                    final _response = await createOrder();
+
+                    if (_response.statusCode == 200) {
+                      Map<String, dynamic> _body =
+                          json.decode(_response.body) as Map<String, dynamic>;
+
+                      _orderId = _body['id'].toString();
+
+                      print('BODYYYYYYYYYYYYYYYYYY' + _body.toString());
+
+                      _addAmount = _body['amount'].toString();
+                      print('AMOUNTTTTTTTTTTT' + _addAmount);
+                    }
+                  } on Exception catch (e) {
+                    print(e);
+                  }
+
                   var options = {
                     'key': 'rzp_test_QmzLview4RmIzC',
-                    'amount': 50000, //in the smallest currency sub-unit.
+                    'amount': _addAmount, //in the smallest currency sub-unit.
                     'name': 'charted',
-                    'order_id':
-                        'order_HswCHDdv3kfNkh', // Generate order_id using Orders API
+                    'order_id': _orderId, // Generate order_id using Orders API
                     'prefill': {
-                      'contact': '9123456789',
-                      'email': 'gaurav.kumar@example.com'
+                      'contact': widget.phoneNumber,
+                      'email': widget.email,
+                      'name': widget.name,
                     }
                   };
 

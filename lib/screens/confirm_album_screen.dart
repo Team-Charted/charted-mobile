@@ -1,125 +1,20 @@
-import 'package:charted/models/song_data.dart';
-import 'package:charted/widgets/smallButton.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/create_album_provider.dart';
+import '../widgets/smallButton.dart';
 import '../widgets/chart_banner.dart';
 
 class ConfirmAlbumScreen extends StatelessWidget {
+  final String _chartId;
   final Color _bannerColor;
   final String _title;
   final String _issue;
   final double _credits;
 
-  ConfirmAlbumScreen(
-      this._bannerColor, this._title, this._issue, this._credits);
-
-  final List<Song> _songsData = [
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: true,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      credits: 8.5,
-      leadSingle: false,
-    ),
-  ];
+  ConfirmAlbumScreen(this._chartId, this._bannerColor, this._title, this._issue,
+      this._credits);
 
   @override
   Widget build(BuildContext context) {
@@ -189,16 +84,17 @@ class ConfirmAlbumScreen extends StatelessWidget {
                 width: _size.width * 0.9,
                 child:
                     //List View
-                    ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    color: _theme.highlightColor,
-                  ),
-                  itemCount: _songsData.length,
+                    ReorderableListView.builder(
+                  onReorder: (oldIndex, newIndex) =>
+                      context.read<CreateAlbum>().reorder(oldIndex, newIndex),
+                  itemCount: context.watch<CreateAlbum>().selectedSongs.length,
                   itemBuilder: (context, index) {
-                    final item = _songsData[index];
+                    final item =
+                        context.watch<CreateAlbum>().selectedSongs[index];
 
                     //List tile
                     return ListTile(
+                      key: ValueKey(item.id),
                       contentPadding: EdgeInsets.all(0.0),
                       tileColor: _theme.primaryColor,
                       onTap: () {
@@ -206,6 +102,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
                         print('List tile of index ' +
                             index.toString() +
                             ' pressed');
+                        context.read<CreateAlbum>().changeLeadIndex(index);
                       },
                       leading: Container(
                         width: _size.width * 0.3,
@@ -248,7 +145,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      trailing: item.leadSingle
+                      trailing: index == context.watch<CreateAlbum>().leadIndex
                           ? Icon(
                               Icons.stars_rounded,
                               color: _theme.accentColor,
@@ -267,7 +164,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
 
             //Confirm Button
             SmallButton(_theme.accentColor, 'Confirm', () {
-              Navigator.pop(context);
+              context.read<CreateAlbum>().createAlbum(_chartId, context);
             }),
 
             SizedBox(

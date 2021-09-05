@@ -25,11 +25,8 @@ class LeaderboardDetailsScreen extends StatefulWidget {
 }
 
 class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
-  List<LeaderboardData> _rankings = [
-    LeaderboardData('1', 'mizanxali', 180),
-    LeaderboardData('2', 'zaid', 178.5),
-    LeaderboardData('3', 'neel_boi', 160),
-  ];
+  List<LeaderboardData> _rankings = [];
+  bool _isLoading = true;
 
   //Get Leaderboard Data
   void getChartResult(String _id) async {
@@ -55,6 +52,7 @@ class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
         setState(() {
           _rankings.clear();
           _rankings = []..addAll(_data);
+          _isLoading = false;
         });
       }
     } on Exception catch (e) {
@@ -141,48 +139,50 @@ class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
             ),
 
             //Main List View
-            Expanded(
-              child: Container(
-                width: _size.width * 0.9,
-                child: ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                          color: _theme.highlightColor,
-                        ),
-                    itemCount: _rankings.length,
-                    itemBuilder: (context, index) {
-                      final item = _rankings[index];
+            _isLoading
+                ? Container()
+                : Expanded(
+                    child: Container(
+                      width: _size.width * 0.9,
+                      child: ListView.separated(
+                          separatorBuilder: (context, index) => Divider(
+                                color: _theme.highlightColor,
+                              ),
+                          itemCount: _rankings.length,
+                          itemBuilder: (context, index) {
+                            final item = _rankings[index];
 
-                      //List tile
-                      return ListTile(
-                        tileColor: _theme.primaryColor,
-                        leading: Text(
-                          (index + 1).toString(),
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        title: Text(
-                          item.getUsername(),
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        trailing: Text(
-                          item.getPoints().toStringAsFixed(2),
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: _theme.highlightColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-            ),
+                            //List tile
+                            return ListTile(
+                              tileColor: _theme.primaryColor,
+                              leading: Text(
+                                (index + 1).toString(),
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              title: Text(
+                                item.getUsername(),
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              trailing: Text(
+                                item.getPoints().toStringAsFixed(2),
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  color: _theme.highlightColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
           ],
         ),
       ),

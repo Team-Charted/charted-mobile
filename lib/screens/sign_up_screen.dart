@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:charted/models/user_data.dart';
+import 'package:charted/models/register_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -172,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 WideButton(theme.accentColor, 'Sign Up', () async {
                   if (_formKey.currentState!.validate()) {
                     //Send Create User Request
-                    final _userData = UserData(
+                    final _userData = RegisterUser(
                       _nameController.text,
                       _emailController.text,
                       _usernameController.text,
@@ -214,7 +214,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   //Register Request
-  Future<http.Response> registerUser(UserData _user) {
+  Future<http.Response> registerUser(RegisterUser _user) {
     return http.post(
       Uri.parse('https://charted-server.herokuapp.com/api/users'),
       headers: {
