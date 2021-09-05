@@ -54,11 +54,11 @@ class _ChartsScreenState extends State<ChartsScreen> {
 
         //Delete token
         UserPreferences.removeToken();
-        Navigator.of(context).pushReplacement(
-          CustomPageRoute(
-            LoginScreen(),
-          ),
-        );
+        Navigator.of(context).pushAndRemoveUntil(
+            CustomPageRoute(
+              LoginScreen(),
+            ),
+            (route) => false);
       }
     } on Exception catch (e) {
       print(e);

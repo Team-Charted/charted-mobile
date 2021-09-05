@@ -118,11 +118,11 @@ class _AccountScreenState extends State<AccountScreen> {
               //Delete token
               UserPreferences.removeToken();
               //Navigate to Login Screen
-              Navigator.of(context).pushReplacement(
-                CustomPageRoute(
-                  LoginScreen(),
-                ),
-              );
+              Navigator.of(context).pushAndRemoveUntil(
+                  CustomPageRoute(
+                    LoginScreen(),
+                  ),
+                  (route) => false);
             }),
 
             SizedBox(

@@ -1,3 +1,4 @@
+import 'package:charted/models/song_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
@@ -27,6 +28,7 @@ class LeaderboardDetailsScreen extends StatefulWidget {
 class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
   List<LeaderboardData> _rankings = [];
   bool _isLoading = true;
+  List<Song> _album = [];
 
   //Get Leaderboard Data
   void getChartResult(String _id) async {
@@ -60,10 +62,42 @@ class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
     }
   }
 
+  void getChartAlbum(String _id) async {
+    final String _token = UserPreferences.getToken() ?? '';
+
+    try {
+      http.Response _response = await http.get(
+        Uri.parse('https://charted-server.herokuapp.com/api/results/' +
+            _id +
+            '/album'),
+        headers: {
+          'x-auth-token': _token,
+        },
+      );
+
+      if (_response.statusCode == 200) {
+        List _body = json.decode(_response.body) as List;
+
+        List<Song> _data = _body.map((e) {
+          return Song.fromJson(e);
+        }).toList();
+
+        print(_data.toString());
+
+        setState(() {
+          _album = []..addAll(_data);
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getChartResult(widget._id);
+    getChartAlbum(widget._id);
   }
 
   @override
@@ -89,11 +123,11 @@ class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
             Navigator.of(context).push(
               CustomPageRoute(
                 MyAlbumScreen(
-                  this.widget._id,
-                  this.widget._bannerColor,
-                  this.widget._title,
-                  this.widget._issue,
-                ),
+                    this.widget._id,
+                    this.widget._bannerColor,
+                    this.widget._title,
+                    this.widget._issue,
+                    List.unmodifiable(this._album)),
               ),
             );
           },

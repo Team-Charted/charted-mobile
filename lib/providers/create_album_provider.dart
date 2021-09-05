@@ -65,11 +65,11 @@ class CreateAlbum with ChangeNotifier {
         searchResults.clear();
         print(_response.body);
         notifyListeners();
-        Navigator.of(context).pushReplacement(
-          CustomPageRoute(
-            HomeScreen(),
-          ),
-        );
+        Navigator.of(context).pushAndRemoveUntil(
+            CustomPageRoute(
+              HomeScreen(),
+            ),
+            (route) => false);
         final snackBar = SnackBar(content: Text('Album Saved'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {

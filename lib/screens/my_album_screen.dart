@@ -1,82 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:convert';
 
 import '../models/song_data.dart';
 import '../widgets/chart_banner.dart';
-import '../utils/user_prefs.dart';
-
-import 'package:http/http.dart' as http;
 
 class MyAlbumScreen extends StatefulWidget {
   final String _id;
   final Color _bannerColor;
   final String _title;
   final String _issue;
+  final List<Song> _songs;
 
   MyAlbumScreen(
-    this._id,
-    this._bannerColor,
-    this._title,
-    this._issue,
-  );
+      this._id, this._bannerColor, this._title, this._issue, this._songs);
 
   @override
   _MyAlbumScreenState createState() => _MyAlbumScreenState();
 }
 
 class _MyAlbumScreenState extends State<MyAlbumScreen> {
-  List<Song> _songs = [
-    Song(
-      id: '1',
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      value: 8.5,
-      leadSingle: false,
-    ),
-    Song(
-      id: '2',
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      value: 8.5,
-      leadSingle: true,
-    ),
-    Song(
-      id: '3',
-      title: 'God’s Plan',
-      artist: 'Drake',
-      imageURL:
-          'https://images.genius.com/8205d3bffef4559d465e64cc862876a5.1000x1000x1.jpg',
-      value: 8.5,
-      leadSingle: false,
-    ),
-  ];
-
-  void getAlbum(String _id) async {
-    final _token = UserPreferences.getToken();
-
-    try {
-      http.Response _response = await http.post(
-        Uri.parse('http://localhost:5000/api/results/' + _id + '/album'),
-        headers: {'x-auth-token': _token as String},
-      );
-
-      if (_response.statusCode == 200) {
-        final List<Song> _data = jsonDecode(_response.body);
-        setState(() {
-          _songs.clear();
-          _songs = []..addAll(_data);
-        });
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
@@ -135,9 +77,9 @@ class _MyAlbumScreenState extends State<MyAlbumScreen> {
                     separatorBuilder: (context, index) => Divider(
                           color: _theme.highlightColor,
                         ),
-                    itemCount: _songs.length,
+                    itemCount: widget._songs.length,
                     itemBuilder: (context, index) {
-                      final item = _songs[index];
+                      final item = widget._songs[index];
 
                       //List tile
                       return ListTile(
