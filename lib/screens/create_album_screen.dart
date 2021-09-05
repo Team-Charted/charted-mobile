@@ -27,6 +27,7 @@ class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
     super.initState();
     Provider.of<CreateAlbum>(context, listen: false).searchResults.clear();
     Provider.of<CreateAlbum>(context, listen: false).selectedSongs.clear();
+    Provider.of<CreateAlbum>(context, listen: false).resetCredits();
     Provider.of<CreateAlbum>(context, listen: false).getAlbum(widget._chartId);
   }
 
@@ -141,7 +142,7 @@ class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
                   ),
                 ),
                 onSubmitted: (value) =>
-                    context.read<CreateAlbum>().searchSongs(value),
+                    context.read<CreateAlbum>().searchSongs(value, context),
               ),
             ),
 
@@ -173,7 +174,8 @@ class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
                           size: 25.0,
                           color: _theme.accentColor,
                         ),
-                        () => context.read<CreateAlbum>().addSong(item));
+                        () =>
+                            context.read<CreateAlbum>().addSong(item, context));
                   },
                 ),
               ),

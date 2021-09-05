@@ -43,8 +43,9 @@ class CreateAlbum with ChangeNotifier {
   }
 
   void createAlbum(String _id, BuildContext context) async {
+    selectedSongs.map((e) => e.setLeadSingle(false));
     //Set lead artist
-    selectedSongs[leadIndex].setLeadSingle();
+    selectedSongs[leadIndex].setLeadSingle(true);
 
     final String _token = UserPreferences.getToken() ?? '';
 
@@ -77,7 +78,7 @@ class CreateAlbum with ChangeNotifier {
     } on Exception catch (e) {}
   }
 
-  void searchSongs(String keyword) async {
+  void searchSongs(String keyword, BuildContext context) async {
     searchResults.clear();
 
     final String _token = UserPreferences.getToken() ?? '';
@@ -101,22 +102,38 @@ class CreateAlbum with ChangeNotifier {
           return Song.fromJson(e);
         }).toList();
 
+        if (_data.isEmpty) {
+          final snackBar = SnackBar(
+            content: Text('No results found'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+
         searchResults = []..addAll(_data);
         notifyListeners();
       }
     } on Exception catch (e) {}
   }
 
-  void addSong(Song song) {
+  void addSong(Song song, BuildContext context) {
     if (selectedSongs.contains(song)) {
-      print('Song is already added');
+      final snackBar = SnackBar(
+        content: Text('Song is already added'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       searchResults.remove(song);
       return;
     } else if (song.value > credits) {
-      print('Not enough credits');
+      final snackBar = SnackBar(
+        content: Text('Not enough credits'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     } else if (selectedSongs.length >= 9) {
-      print('Can\'t select more than 9 songs');
+      final snackBar = SnackBar(
+        content: Text('Can\'t select more than 9 songs'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     } else {
       selectedSongs.add(song);
@@ -150,5 +167,9 @@ class CreateAlbum with ChangeNotifier {
   void changeLeadIndex(int index) {
     leadIndex = index;
     notifyListeners();
+  }
+
+  void resetCredits() {
+    this.credits = 75;
   }
 }

@@ -39,7 +39,7 @@ class Song {
 
   bool getLeadSingle() => leadSingle;
 
-  void setLeadSingle() => this.leadSingle = true;
+  void setLeadSingle(bool _x) => this.leadSingle = _x;
 
   //Decoding json object
   Song.fromJson(Map<String, dynamic> json)
@@ -50,7 +50,7 @@ class Song {
             ? json['credits'].toDouble()
             : json['points'].toDouble(),
         imageURL = json['imageURL'],
-        leadSingle = json['leadSingle'] != null;
+        leadSingle = json['leadSingle'] == null ? false : json['leadSingle'];
 
   //Encoding json
   Map<String, dynamic> toJson() {
