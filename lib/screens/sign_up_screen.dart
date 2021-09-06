@@ -188,11 +188,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         final _body = json.decode(_response.body);
                         UserPreferences.setToken(_body['token']);
                         //Navigate to Home screen
-                        Navigator.of(context).pushReplacement(
-                          CustomPageRoute(
-                            HomeScreen(),
-                          ),
-                        );
+                        Navigator.of(context).pushAndRemoveUntil(
+                            CustomPageRoute(
+                              HomeScreen(),
+                            ),
+                            (route) => false);
                       } else {
                         print(_response.body);
                       }
