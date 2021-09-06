@@ -82,6 +82,11 @@ class CreateAlbum with ChangeNotifier {
             ),
             (route) => false);
         showSnackbar(context, 'Album saved', Theme.of(context).accentColor);
+      } else if (_response.statusCode == 400) {
+        final _data = json.decode(_response.body) as Map;
+        final _errors = _data['errors'] as List;
+        final _error = _errors[0] as Map;
+        showSnackbar(context, _error['msg'], Theme.of(context).accentColor);
       } else {
         print(_response.body);
       }

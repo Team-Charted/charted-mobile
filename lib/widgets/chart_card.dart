@@ -76,7 +76,7 @@ class ChartCard extends StatelessWidget {
                         width: size.width * 0.005,
                       ),
                       Text(
-                        '\$' + prizePool,
+                        '\₹' + prizePool,
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 14,
@@ -95,7 +95,7 @@ class ChartCard extends StatelessWidget {
                         width: size.width * 0.005,
                       ),
                       Text(
-                        '\$' + cost,
+                        '\₹' + cost,
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 14,

@@ -68,7 +68,7 @@ class ResultCard extends StatelessWidget {
                       width: size.width * 0.005,
                     ),
                     Text(
-                      '\$' + this.prizePool,
+                      '\₹' + this.prizePool,
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 15,
@@ -90,7 +90,7 @@ class ResultCard extends StatelessWidget {
                       width: size.width * 0.005,
                     ),
                     Text(
-                      '\$' + this.winnings,
+                      '\₹' + this.winnings,
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 15,

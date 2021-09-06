@@ -132,7 +132,7 @@ class _WalletDetailsCardState extends State<WalletDetailsCard> {
 
           //Amount
           Text(
-            '\$' + widget.balance,
+            '\₹' + widget.balance,
             style: GoogleFonts.inter(
               color: Colors.white,
               fontSize: 28,
