@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/song_data.dart';
 import '../utils/user_prefs.dart';
@@ -31,6 +32,10 @@ class CreateAlbum with ChangeNotifier {
         final _data = json.decode(_response.body) as Map;
         List<Song> _songs = (_data['songs'] as List).map((e) {
           this.credits -= e['credits'].toDouble();
+          if (e['leadSingle']) {
+            this.leadIndex = (_data['songs'] as List).indexOf(e);
+            e['leadSingle'] = false;
+          }
           return Song.fromJson(e);
         }).toList();
 
@@ -43,9 +48,13 @@ class CreateAlbum with ChangeNotifier {
   }
 
   void createAlbum(String _id, BuildContext context) async {
-    selectedSongs.map((e) => e.setLeadSingle(false));
+    if (selectedSongs.isEmpty) {
+      showSnackbar(
+          context, 'Album can\'t  be empty', Theme.of(context).accentColor);
+      return;
+    }
     //Set lead artist
-    selectedSongs[leadIndex].setLeadSingle(true);
+    selectedSongs[leadIndex].setLeadSingle();
 
     final String _token = UserPreferences.getToken() ?? '';
 
@@ -70,8 +79,7 @@ class CreateAlbum with ChangeNotifier {
               HomeScreen(),
             ),
             (route) => false);
-        final snackBar = SnackBar(content: Text('Album Saved'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        showSnackbar(context, 'Album saved', Theme.of(context).accentColor);
       } else {
         print(_response.body);
       }
@@ -103,10 +111,8 @@ class CreateAlbum with ChangeNotifier {
         }).toList();
 
         if (_data.isEmpty) {
-          final snackBar = SnackBar(
-            content: Text('No results found'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showSnackbar(
+              context, 'No results found', Theme.of(context).accentColor);
         }
 
         searchResults = []..addAll(_data);
@@ -117,23 +123,20 @@ class CreateAlbum with ChangeNotifier {
 
   void addSong(Song song, BuildContext context) {
     if (selectedSongs.contains(song)) {
-      final snackBar = SnackBar(
-        content: Text('Song is already added'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackbar(
+          context, 'Song is already added', Theme.of(context).accentColor);
       searchResults.remove(song);
       return;
     } else if (song.value > credits) {
-      final snackBar = SnackBar(
-        content: Text('Not enough credits'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackbar(
+          context, 'Not enough credits', Theme.of(context).accentColor);
       return;
     } else if (selectedSongs.length >= 9) {
-      final snackBar = SnackBar(
-        content: Text('Can\'t select more than 9 songs'),
+      showSnackbar(
+        context,
+        'Can\'t select more than 9 songs',
+        Theme.of(context).accentColor,
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     } else {
       selectedSongs.add(song);
@@ -171,5 +174,29 @@ class CreateAlbum with ChangeNotifier {
 
   void resetCredits() {
     this.credits = 75;
+  }
+
+  void showSnackbar(BuildContext _context, String _content, Color _bgColor) {
+    ScaffoldMessenger.of(_context).hideCurrentSnackBar();
+    final _snackBar = SnackBar(
+      content: Text(
+        _content,
+        style: GoogleFonts.inter(
+          fontSize: 13,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: _bgColor,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      // action: SnackBarAction(
+      //   label: 'Okay',
+      //   textColor: Colors.white,
+      //   onPressed: () => ScaffoldMessenger.of(_context).hideCurrentSnackBar(),
+      // ),
+    );
+    ScaffoldMessenger.of(_context).showSnackBar(_snackBar);
   }
 }

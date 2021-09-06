@@ -39,7 +39,7 @@ class Song {
 
   bool getLeadSingle() => leadSingle;
 
-  void setLeadSingle(bool _x) => this.leadSingle = _x;
+  void setLeadSingle() => this.leadSingle = true;
 
   //Decoding json object
   Song.fromJson(Map<String, dynamic> json)

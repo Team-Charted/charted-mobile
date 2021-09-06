@@ -187,8 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       //if success then login and save token
                       if (_response.statusCode == 200) {
-                        print(_response);
-
                         //Update shared pref
                         final _body = json.decode(_response.body);
                         await UserPreferences.setToken(_body['token']);

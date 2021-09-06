@@ -31,8 +31,6 @@ class UserDetails with ChangeNotifier {
         Map<String, dynamic> _data =
             json.decode(_response.body) as Map<String, dynamic>;
 
-        print(_data['name']);
-
         this._name = _data['name'];
         this._email = _data['email'];
         this._id = _data['_id'];
