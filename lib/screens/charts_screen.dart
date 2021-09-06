@@ -127,7 +127,13 @@ class _ChartsScreenState extends State<ChartsScreen> {
           //Main List View
 
           child: isLoading
-              ? Container()
+              ? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: _theme.accentColor,
+                    ),
+                  ),
+                )
               : ListView.separated(
                   separatorBuilder: (context, index) => SizedBox(
                         height: _size.height * 0.02,

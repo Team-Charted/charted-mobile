@@ -44,7 +44,9 @@ class CreateAlbum with ChangeNotifier {
       } else {
         print(_response.body);
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   void createAlbum(String _id, BuildContext context) async {
@@ -83,7 +85,9 @@ class CreateAlbum with ChangeNotifier {
       } else {
         print(_response.body);
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   void searchSongs(String keyword, BuildContext context) async {
@@ -118,7 +122,9 @@ class CreateAlbum with ChangeNotifier {
         searchResults = []..addAll(_data);
         notifyListeners();
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   void addSong(Song song, BuildContext context) {

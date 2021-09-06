@@ -19,11 +19,20 @@ class SongResultListTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.all(0.0),
       tileColor: _theme.primaryColor,
-      leading: Image.network(
-        _item.imageURL,
-        fit: BoxFit.fill,
+      leading: FadeInImage.assetNetwork(
+        placeholder: 'assets/images/charted.png',
+        image: _item.imageURL,
+        fit: BoxFit.cover,
         width: _size.width * 0.2,
         height: _size.width * 0.2,
+        imageErrorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/images/charted.png',
+            fit: BoxFit.cover,
+            width: _size.width * 0.2,
+            height: _size.width * 0.2,
+          );
+        },
       ),
       title: Text(
         _item.getTitle(),

@@ -85,12 +85,6 @@ class _MyAlbumScreenState extends State<MyAlbumScreen> {
                       return ListTile(
                         contentPadding: EdgeInsets.all(0.0),
                         tileColor: _theme.primaryColor,
-                        onTap: () {
-                          //Change lead artist
-                          print('List tile of index ' +
-                              index.toString() +
-                              ' pressed');
-                        },
                         leading: Container(
                           width: _size.width * 0.3,
                           child: Row(
@@ -107,18 +101,28 @@ class _MyAlbumScreenState extends State<MyAlbumScreen> {
                                 ),
 
                                 //Thumbnail
-                                Image.network(
-                                  item.imageURL,
-                                  fit: BoxFit.fill,
+                                FadeInImage.assetNetwork(
+                                  placeholder: 'assets/images/charted.png',
+                                  image: item.imageURL,
+                                  fit: BoxFit.cover,
                                   width: _size.width * 0.2,
                                   height: _size.width * 0.2,
+                                  imageErrorBuilder:
+                                      (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/images/charted.png',
+                                      fit: BoxFit.cover,
+                                      width: _size.width * 0.2,
+                                      height: _size.width * 0.2,
+                                    );
+                                  },
                                 ),
                               ]),
                         ),
                         title: Text(
                           item.getTitle(),
                           style: GoogleFonts.inter(
-                            fontSize: 15,
+                            fontSize: 14,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -126,18 +130,34 @@ class _MyAlbumScreenState extends State<MyAlbumScreen> {
                         subtitle: Text(
                           item.getArtist(),
                           style: GoogleFonts.inter(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: _theme.highlightColor,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
-                        trailing: item.leadSingle
-                            ? Icon(
-                                Icons.stars_rounded,
-                                color: _theme.accentColor,
-                                size: 30,
-                              )
-                            : SizedBox(),
+                        trailing: Container(
+                          width: _size.width * 0.3,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              item.leadSingle
+                                  ? Icon(
+                                      Icons.stars_rounded,
+                                      color: _theme.accentColor,
+                                      size: 30,
+                                    )
+                                  : Container(),
+                              Text(
+                                item.value.toStringAsFixed(2),
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  color: _theme.highlightColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     }),
               ),

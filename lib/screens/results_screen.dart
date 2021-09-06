@@ -115,7 +115,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
           //Main List View
 
           child: _isLoading
-              ? Container()
+              ? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: _theme.accentColor,
+                    ),
+                  ),
+                )
               : ListView.separated(
                   separatorBuilder: (context, index) => SizedBox(
                         height: _size.height * 0.02,

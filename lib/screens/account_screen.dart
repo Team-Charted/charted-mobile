@@ -85,7 +85,13 @@ class _AccountScreenState extends State<AccountScreen> {
 
             //User Details Card
             _isLoading
-                ? Container()
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: _theme.accentColor,
+                      ),
+                    ),
+                  )
                 : _userInfoCard(
                     _theme,
                     _size,

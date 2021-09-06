@@ -25,6 +25,12 @@ class _CountDownState extends State<CountDown> {
     startTimer();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _timer!.cancel();
+  }
+
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {

@@ -36,11 +36,6 @@ class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
     final _theme = Theme.of(context);
     final _size = MediaQuery.of(context).size;
 
-    //Colors
-    final Color _billboardBlue = Color.fromRGBO(48, 193, 242, 1);
-    //final Color _spotifyGreen = Color.fromRGBO(39, 163, 112, 1);
-    //final Color _appleMusicRed = Color.fromRGBO(225, 32, 54, 1);
-
     //Appbar
     final _appBar = AppBar(
       title: Text(
@@ -151,35 +146,53 @@ class _CreateAlbumScreenState extends State<CreateAlbumScreen> {
             ),
 
             //Main list View
-            Expanded(
-              child: Container(
-                width: _size.width * 0.9,
-                child:
-                    //List View
-                    ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    color: _theme.highlightColor,
-                  ),
-                  itemCount: context.watch<CreateAlbum>().searchResults.length,
-                  itemBuilder: (context, index) {
-                    final item =
-                        context.watch<CreateAlbum>().searchResults[index];
-
-                    //List Tile
-                    return SongResultListTile(
-                        index,
-                        item,
-                        Icon(
-                          Icons.add_circle_outline_rounded,
-                          size: 25.0,
-                          color: _theme.accentColor,
+            context.watch<CreateAlbum>().searchResults.isEmpty
+                ? Expanded(
+                    child: Container(
+                      width: _size.width * 0.9,
+                      child: Center(
+                        child: Text(
+                          'Search from millions of songs to add to your album.',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        () =>
-                            context.read<CreateAlbum>().addSong(item, context));
-                  },
-                ),
-              ),
-            ),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Container(
+                      width: _size.width * 0.9,
+                      child:
+                          //List View
+                          ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          color: _theme.highlightColor,
+                        ),
+                        itemCount:
+                            context.watch<CreateAlbum>().searchResults.length,
+                        itemBuilder: (context, index) {
+                          final item =
+                              context.watch<CreateAlbum>().searchResults[index];
+
+                          //List Tile
+                          return SongResultListTile(
+                              index,
+                              item,
+                              Icon(
+                                Icons.add_circle_outline_rounded,
+                                size: 25.0,
+                                color: _theme.accentColor,
+                              ),
+                              () => context
+                                  .read<CreateAlbum>()
+                                  .addSong(item, context));
+                        },
+                      ),
+                    ),
+                  ),
 
             SizedBox(
               height: _size.height * 0.01,

@@ -67,7 +67,9 @@ class UserDetails with ChangeNotifier {
         this._balance -= _amount;
         notifyListeners();
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   void addMoney(double amount) {

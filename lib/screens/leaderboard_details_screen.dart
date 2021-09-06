@@ -174,7 +174,15 @@ class _LeaderboardDetailsScreenState extends State<LeaderboardDetailsScreen> {
 
             //Main List View
             _isLoading
-                ? Container()
+                ? Expanded(
+                    child: Container(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: _theme.accentColor,
+                        ),
+                      ),
+                    ),
+                  )
                 : Expanded(
                     child: Container(
                       width: _size.width * 0.9,

@@ -99,14 +99,10 @@ class ConfirmAlbumScreen extends StatelessWidget {
                       tileColor: _theme.primaryColor,
                       onTap: () {
                         //Change lead artist
-                        print('List tile of index ' +
-                            index.toString() +
-                            ' pressed');
                         context.read<CreateAlbum>().changeLeadIndex(index);
                       },
                       leading: Container(
                         width: _size.width * 0.3,
-                        //color: Colors.white,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -121,18 +117,28 @@ class ConfirmAlbumScreen extends StatelessWidget {
                               ),
 
                               //Thumbnail
-                              Image.network(
-                                item.imageURL,
-                                fit: BoxFit.fill,
+                              FadeInImage.assetNetwork(
+                                placeholder: 'assets/images/charted.png',
+                                image: item.imageURL,
+                                fit: BoxFit.cover,
                                 width: _size.width * 0.2,
                                 height: _size.width * 0.2,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/charted.png',
+                                    fit: BoxFit.cover,
+                                    width: _size.width * 0.2,
+                                    height: _size.width * 0.2,
+                                  );
+                                },
                               ),
                             ]),
                       ),
                       title: Text(
                         item.getTitle(),
                         style: GoogleFonts.inter(
-                          fontSize: 15,
+                          fontSize: 14,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -140,7 +146,7 @@ class ConfirmAlbumScreen extends StatelessWidget {
                       subtitle: Text(
                         item.getArtist(),
                         style: GoogleFonts.inter(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: _theme.highlightColor,
                           fontWeight: FontWeight.normal,
                         ),
