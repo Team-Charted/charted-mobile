@@ -1,3 +1,4 @@
+import 'package:charted/widgets/countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,14 +59,7 @@ class ChartCard extends StatelessWidget {
                 ),
 
                 //Time remaining
-                Text(
-                  time,
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                CountDown(time),
 
                 //Prize and fee
                 Container(
